@@ -3,5 +3,5 @@
  *
  * Denoted by `[I]`.
  */
-export type Current = {current: 1};
-export const Current: Current = {current: 1};
+export type Current = { current: 1 };
+export const Current: Current = { current: 1 };

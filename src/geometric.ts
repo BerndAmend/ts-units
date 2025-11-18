@@ -45,5 +45,5 @@ export const NativeGeometric: Geometric<number> = {
   },
   atan2: function (left: number, right: number): number {
     return Math.atan2(left, right);
-  }
+  },
 };

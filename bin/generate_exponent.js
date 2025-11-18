@@ -6,10 +6,10 @@ const MAX_EXPONENT = 6;
 
 function formatExp(num) {
   if (num < -MAX_EXPONENT || num > MAX_EXPONENT) {
-    return 'never';
+    return "never";
   }
   if (num === 0) {
-    return 'undefined';
+    return "undefined";
   }
   return `${num}`;
 }
@@ -23,7 +23,7 @@ function binaryTable(f) {
     }
     lines.push(`  };`);
   }
-  return lines.join('\n');
+  return lines.join("\n");
 }
 
 function ableTable(f) {
@@ -31,7 +31,7 @@ function ableTable(f) {
   for (let i = -MAX_EXPONENT; i <= MAX_EXPONENT; i++) {
     lines.push(`  [${i}]: ${ableValues(f, i)};`);
   }
-  return lines.join('\n');
+  return lines.join("\n");
 }
 
 function ableValues(f, i) {
@@ -42,7 +42,7 @@ function ableValues(f, i) {
       values.push(formatExp(j));
     }
   }
-  return values.join(' | ');
+  return values.join(" | ");
 }
 
 function unaryTable(f) {
@@ -50,13 +50,13 @@ function unaryTable(f) {
   for (let i = -MAX_EXPONENT; i <= MAX_EXPONENT; i++) {
     lines.push(`  [${i}]: ${formatExp(f(i))};`);
   }
-  return lines.join('\n');
+  return lines.join("\n");
 }
 
 /** An array of all exponents. */
 const EXPONENTS = Array.from(
-  {length: MAX_EXPONENT * 2 + 1},
-  (_, i) => i - MAX_EXPONENT
+  { length: MAX_EXPONENT * 2 + 1 },
+  (_, i) => i - MAX_EXPONENT,
 );
 
 const TEMPLATE = `// GENERATED FILE | DO NOT MODIFY
@@ -94,7 +94,7 @@ const TEMPLATE = `// GENERATED FILE | DO NOT MODIFY
  * \`undefined\` and \`0\` since \`undefined\` isn't a valid property name.
  */
 export type Exponent =
-${EXPONENTS.map(x => '  | ' + formatExp(x)).join('\n')};
+${EXPONENTS.map((x) => "  | " + formatExp(x)).join("\n")};
 
 /**
  * Type guard returning whether x is a valid Exponent.
@@ -109,9 +109,11 @@ export function isExponent(x: unknown): x is Exponent {
     return false;
   }
 
-  return [${EXPONENTS.filter(x => x !== 0)
-    .map(x => formatExp(x))
-    .join(', ')}].indexOf(x) >= 0;
+  return [${
+  EXPONENTS.filter((x) => x !== 0)
+    .map((x) => formatExp(x))
+    .join(", ")
+}].indexOf(x) >= 0;
 }
 
 /**
@@ -230,7 +232,7 @@ ${ableTable((a, b) => a - b)}
 export type Negate<X extends Exponent> = _Negate[UndefinedToZero<X>];
 
 interface _Negate extends UnaryTable {
-${unaryTable(x => -x)}
+${unaryTable((x) => -x)}
 }
 
 /**
@@ -248,7 +250,7 @@ ${unaryTable(x => -x)}
 export type Double<X extends Exponent> = _Double[UndefinedToZero<X>];
 
 interface _Double extends UnaryTable {
-${unaryTable(x => x * 2)}
+${unaryTable((x) => x * 2)}
 }
 
 /**
@@ -266,7 +268,7 @@ ${unaryTable(x => x * 2)}
 export type Triple<X extends Exponent> = _Triple[UndefinedToZero<X>];
 
 interface _Triple extends UnaryTable {
-${unaryTable(x => x * 3)}
+${unaryTable((x) => x * 3)}
 }
 
 /**

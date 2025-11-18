@@ -1,12 +1,13 @@
 import {
-  Add,
-  Double,
-  Negate,
-  Subtract,
-  Triple,
-  isExponent
-} from '../src/exponent';
-import {expect} from 'chai';
+  type Add,
+  type Double,
+  isExponent,
+  type Negate,
+  type Subtract,
+  type Triple,
+} from "../src/exponent.ts";
+import { describe, it } from "@std/testing/bdd";
+import { expect } from "@std/expect";
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 const a1: Add<2, 1> = 3;
@@ -27,19 +28,19 @@ const t2: Triple<1> = 3;
 const t3: Triple<undefined> = undefined;
 /* eslint-enable @typescript-eslint/no-unused-vars */
 
-describe('exponent', () => {
-  describe('isExponent', () => {
+describe("exponent", () => {
+  describe("isExponent", () => {
     const tests = [
-      {value: 'foo', isExponent: false},
-      {value: 1, isExponent: true},
-      {value: -4, isExponent: true},
-      {value: undefined, isExponent: true},
-      {value: 0, isExponent: false},
-      {value: 3.2, isExponent: false}
+      { value: "foo", isExponent: false },
+      { value: 1, isExponent: true },
+      { value: -4, isExponent: true },
+      { value: undefined, isExponent: true },
+      { value: 0, isExponent: false },
+      { value: 3.2, isExponent: false },
     ];
-    tests.forEach(test => {
+    tests.forEach((test) => {
       it(`isExponent(${test.value}) = ${test.isExponent}`, () => {
-        expect(isExponent(test.value)).to.equal(test.isExponent);
+        expect(isExponent(test.value)).toEqual(test.isExponent);
       });
     });
   });

@@ -3,5 +3,5 @@
  *
  * Denoted by `[L]^2[T]^-2`.
  */
-export type Dose = {length: 2; time: -2};
-export const Dose: Dose = {length: 2, time: -2};
+export type Dose = { length: 2; time: -2 };
+export const Dose: Dose = { length: 2, time: -2 };

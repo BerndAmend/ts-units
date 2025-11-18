@@ -4,5 +4,5 @@
  * us to provide some type safety that prevents, say, an angle to be assigned
  * to a scalar property.
  */
-export type Angle = {angle: 1};
-export const Angle: Angle = {angle: 1};
+export type Angle = { angle: 1 };
+export const Angle: Angle = { angle: 1 };
