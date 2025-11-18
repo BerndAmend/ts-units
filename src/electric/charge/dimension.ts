@@ -3,5 +3,5 @@
  *
  * Denoted by `[T][I]`.
  */
-export type Charge = {time: 1; current: 1};
-export const Charge: Charge = {time: 1, current: 1};
+export type Charge = { time: 1; current: 1 };
+export const Charge: Charge = { time: 1, current: 1 };

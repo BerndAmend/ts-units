@@ -52,11 +52,11 @@ export type Exponent =
  * @param x Any value.
  */
 export function isExponent(x: unknown): x is Exponent {
-  if (typeof x === 'undefined') {
+  if (typeof x === "undefined") {
     return true;
   }
 
-  if (typeof x !== 'number') {
+  if (typeof x !== "number") {
     return false;
   }
 
@@ -341,7 +341,7 @@ interface _Addable extends UnaryTable {
  */
 export type Subtract<
   A extends Exponent,
-  B extends Exponent
+  B extends Exponent,
 > = _Subtract[UndefinedToZero<A>][UndefinedToZero<B>];
 
 interface _Subtract extends BinaryTable {

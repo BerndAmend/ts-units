@@ -56,5 +56,5 @@ export const NativeArithmetic: Arithmetic<number> = {
   },
   compare: function (left: number, right: number): number {
     return left - right;
-  }
+  },
 };

@@ -3,5 +3,5 @@
  *
  * Denoted by `[Θ]`.
  */
-export type Temperature = {temperature: 1};
-export const Temperature: Temperature = {temperature: 1};
+export type Temperature = { temperature: 1 };
+export const Temperature: Temperature = { temperature: 1 };

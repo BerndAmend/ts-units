@@ -1,6 +1,0 @@
-reporter:
-  - mocha-multi
-reporterOptions:
-  - mocha-multi=.mocha-multi.json
-spec: 'test/*_test.ts'
-ui: bdd
