@@ -542,10 +542,12 @@ export const makeUnitFactory = <NumberType>(
       }
 
       const other = amountOrUnit;
-      if (this.offset || other.offset) {
+      if (
+        compare(this.offset, fromNative(0)) !== 0 ||
+        compare(other.offset, fromNative(0)) !== 0
+      ) {
         throw new Error(
-          `Cannot multiply units with offsets (unit ${this.symbol} has offset ` +
-            `${this.offset} and unit ${other.symbol} has offset ${other.offset}`,
+          `Cannot multiply units with offsets (unit ${this.symbol} has offset ${this.offset} and unit ${other.symbol} has offset ${other.offset})`,
         );
       }
 
@@ -573,10 +575,12 @@ export const makeUnitFactory = <NumberType>(
       }
 
       const other = amountOrUnit;
-      if (this.offset || other.offset) {
+      if (
+        compare(this.offset, fromNative(0)) !== 0 ||
+        compare(other.offset, fromNative(0)) !== 0
+      ) {
         throw new Error(
-          `Cannot divide units with offsets (unit ${this.symbol} has offset ` +
-            `${this.offset} and unit ${other.symbol} has offset ${other.offset}`,
+          `Cannot divide units with offsets (unit ${this.symbol} has offset ${this.offset} and unit ${other.symbol} has offset ${other.offset})`,
         );
       }
 
@@ -588,10 +592,9 @@ export const makeUnitFactory = <NumberType>(
     }
 
     reciprocal() {
-      if (this.offset) {
+      if (compare(this.offset, fromNative(0)) !== 0) {
         throw new Error(
-          "Cannot take the reciprocal of a unit with offset (unit " +
-            `${this.symbol} has offset ${this.offset})`,
+          `Cannot take the reciprocal of a unit with offset (unit ${this.symbol} has offset ${this.offset})`,
         );
       }
 
@@ -603,10 +606,9 @@ export const makeUnitFactory = <NumberType>(
     }
 
     squared(this: Unit<NumberType, D>) {
-      if (this.offset) {
+      if (compare(this.offset, fromNative(0)) !== 0) {
         throw new Error(
-          `Cannot square a unit with an offset (unit ${this.symbol} has ` +
-            `offset ${this.offset})`,
+          `Cannot square a unit with an offset (unit ${this.symbol} has offset ${this.offset})`,
         );
       }
 
@@ -618,10 +620,9 @@ export const makeUnitFactory = <NumberType>(
     }
 
     cubed() {
-      if (this.offset) {
+      if (compare(this.offset, fromNative(0)) !== 0) {
         throw new Error(
-          `Cannot cube a unit with an offset (unit ${this.symbol} has ` +
-            `offset ${this.offset})`,
+          `Cannot cube a unit with an offset (unit ${this.symbol} has offset ${this.offset})`,
         );
       }
 
