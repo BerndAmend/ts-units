@@ -9,19 +9,17 @@ import {
 import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
-const t1: Times<{ length: 1 }, { length: 1 }> = { length: 2 };
-const t2: Times<{ length: 1 }, { time: -1 }> = { length: 1, time: -1 };
-const t3: Times<{ length: 1 }, { length: -1 }> = {};
-const o1: Over<{ length: 1 }, { time: 1 }> = { length: 1, time: -1 };
-const o2: Over<{ length: 1 }, { length: 1 }> = {};
-const r1: Reciprocal<{ time: 1 }> = { time: -1 };
-const r2: Reciprocal<{ length: 1; time: -2 }> = { length: -1, time: 2 };
-const r3: Reciprocal<Dimensions> = {};
-const d1: Squared<{ time: 1 }> = { time: 2 };
-const d2: Squared<{ length: 1; time: -2 }> = { length: 2, time: -4 };
-const d3: Squared<Dimensions> = {};
-/* eslint-enable @typescript-eslint/no-unused-vars */
+const _t1: Times<{ length: 1 }, { length: 1 }> = { length: 2 };
+const _t2: Times<{ length: 1 }, { time: -1 }> = { length: 1, time: -1 };
+const _t3: Times<{ length: 1 }, { length: -1 }> = {};
+const _o1: Over<{ length: 1 }, { time: 1 }> = { length: 1, time: -1 };
+const _o2: Over<{ length: 1 }, { length: 1 }> = {};
+const _r1: Reciprocal<{ time: 1 }> = { time: -1 };
+const _r2: Reciprocal<{ length: 1; time: -2 }> = { length: -1, time: 2 };
+const _r3: Reciprocal<Dimensions> = {};
+const _d1: Squared<{ time: 1 }> = { time: 2 };
+const _d2: Squared<{ length: 1; time: -2 }> = { length: 2, time: -4 };
+const _d3: Squared<Dimensions> = {};
 
 describe("dimension", () => {
   describe("Times", () => {

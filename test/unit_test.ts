@@ -15,10 +15,10 @@ type Length = { length: 1 };
 const Length: Length = { length: 1 };
 
 type Area = { length: 2 };
-const Area: Area = { length: 2 };
+const _Area: Area = { length: 2 };
 
 type Volume = { length: 3 };
-const Volume: Volume = { length: 3 };
+const _Volume: Volume = { length: 3 };
 
 type Time = { time: 1 };
 const Time: Time = { time: 1 };
@@ -27,7 +27,7 @@ type Frequency = { time: -1 };
 const Frequency: Frequency = { time: -1 };
 
 type Speed = { length: 1; time: -1 };
-const Speed: Speed = { length: 1, time: -1 };
+const _Speed: Speed = { length: 1, time: -1 };
 
 export const StringArithmetic: Arithmetic<string> = {
   fromNative: function (value: number): string {
