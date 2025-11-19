@@ -520,7 +520,7 @@ export const makeUnitFactory = <NumberType>(
     }
 
     withSiPrefix(prefix: SiPrefix): Unit<NumberType, D> {
-      return this.times(1 * SI_PREFIX[prefix]).withSymbol(
+      return this.times(SI_PREFIX[prefix]).withSymbol(
         `${prefix}${this.symbol}`,
       );
     }
