@@ -1,10 +1,11 @@
-#!/usr/bin/env node
+#!/usr/bin/env deno
 /** Generates the exponent.ts file. */
+import * as process from "node:process";
 
 /** The maximum exponent to support. */
 const MAX_EXPONENT = 6;
 
-function formatExp(num) {
+function formatExp(num: number) {
   if (num < -MAX_EXPONENT || num > MAX_EXPONENT) {
     return "never";
   }
@@ -14,8 +15,8 @@ function formatExp(num) {
   return `${num}`;
 }
 
-function binaryTable(f) {
-  let lines = [];
+function binaryTable(f: (i: number, j: number) => number) {
+  const lines = [];
   for (let i = -MAX_EXPONENT; i <= MAX_EXPONENT; i++) {
     lines.push(`  [${i}]: {`);
     for (let j = -MAX_EXPONENT; j <= MAX_EXPONENT; j++) {
@@ -26,16 +27,16 @@ function binaryTable(f) {
   return lines.join("\n");
 }
 
-function ableTable(f) {
-  let lines = [];
+function ableTable(f: (i: number, j: number) => number) {
+  const lines = [];
   for (let i = -MAX_EXPONENT; i <= MAX_EXPONENT; i++) {
     lines.push(`  [${i}]: ${ableValues(f, i)};`);
   }
   return lines.join("\n");
 }
 
-function ableValues(f, i) {
-  let values = [];
+function ableValues(f: (i: number, j: number) => number, i: number) {
+  const values = [];
   for (let j = -MAX_EXPONENT; j <= MAX_EXPONENT; j++) {
     const value = f(i, j);
     if (-MAX_EXPONENT <= value && value <= MAX_EXPONENT) {
@@ -45,8 +46,8 @@ function ableValues(f, i) {
   return values.join(" | ");
 }
 
-function unaryTable(f) {
-  let lines = [];
+function unaryTable(f: (i: number) => number) {
+  const lines = [];
   for (let i = -MAX_EXPONENT; i <= MAX_EXPONENT; i++) {
     lines.push(`  [${i}]: ${formatExp(f(i))};`);
   }
