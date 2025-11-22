@@ -277,7 +277,7 @@ newtons
 ### Frequency
 
 ```ts
-import { Frequency, hertz } from "@bernd/ts-units/force";
+import { Frequency, hertz } from "@bernd/ts-units/frequency";
 const frequency: Frequency = hertz(608);
 ```
 
