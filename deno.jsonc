@@ -1,11 +1,13 @@
 {
   "name": "@bernd/ts-units",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "license": "Apache-2.0",
 
   "exports": {
+    "./acceleration": "./src/acceleration/mod.ts",
     "./angle": "./src/angle/mod.ts",
     "./angle/solid": "./src/angle/solid/mod.ts",
+    "./angularSpeed": "./src/angularSpeed/mod.ts",
     "./area": "./src/area/mod.ts",
     "./electric/capacitance": "./src/electric/capacitance/mod.ts",
     "./electric/charge": "./src/electric/charge/mod.ts",
