@@ -1,5 +1,8 @@
 # Physical Units for TypeScript
 
+[![Deno CI](https://github.com/BerndAmend/ts-units/actions/workflows/deno.yml/badge.svg)](https://github.com/BerndAmend/ts-units/actions/workflows/deno.yml)
+[![JSR](https://jsr.io/badges/@bernd/ts-units)](https://jsr.io/@bernd/ts-units)
+
 This is a fork of ![buge/ts-units](https://github.com/buge/ts-units) to use it
 in deno as an esm.
 
