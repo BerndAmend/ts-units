@@ -545,17 +545,30 @@ describe("unit", () => {
     describe("toString", () => {
       it("appends the unit", () => {
         const meters = makeUnit("m", Length);
-        expect(meters(5).toString()).toEqual("5m");
+        expect(meters(5).toString()).toEqual("5 m");
       });
 
       it("simplifies the amount", () => {
         const meters = makeUnit("m", Length);
-        expect(meters(1 / 3).toString()).toEqual("0.333m");
+        expect(meters(1 / 3).toString()).toEqual("0.333 m");
       });
 
       it("uses thousand separators", () => {
         const meters = makeUnit("m", Length);
-        expect(meters(1000).toString()).toEqual("1,000m");
+        expect(meters(1000).toString()).toEqual("1,000 m");
+      });
+
+      it("formats celsius correctly", () => {
+        const kelvin = makeUnit("K", Temperature);
+        const celsius = kelvin.withOffset(-273.15).withSymbol("ºC");
+        expect(celsius(0).toString()).toEqual("0 ºC");
+        expect(celsius(20).toString()).toEqual("20 ºC");
+      });
+
+      it("supports custom locales", () => {
+        const meters = makeUnit("m", Length);
+        expect(meters(1234.5).toLocaleString("de-DE")).toEqual("1.234,5 m");
+        expect(meters(1234.5).toLocaleString("en-US")).toEqual("1,234.5 m");
       });
     });
 
