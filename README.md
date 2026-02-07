@@ -71,17 +71,13 @@ const html = `<span class="amount">${temp.amount.toFixed(1)}</span>` +
   `<span class="symbol">${temp.unit.symbol}</span>`;
 ```
 
-const html = `<span class="amount">${temp.amount.toFixed(1)}</span>` +
-`<span class="symbol">${temp.unit.symbol}</span>`;
-
-````
 You can also use `toLocaleString` for locale-aware formatting:
 
 ```ts
 const length = meters(1234.5);
 length.toLocaleString("de-DE"); // "1.234,5 m"
 length.toLocaleString("en-US"); // "1,234.5 m"
-````
+```
 
 ### Parsing
 
@@ -672,33 +668,6 @@ export const dollars: Unit<Decimal, dimension.Money> = makeUnit(
 ```
 
 ## Limitations
-
-### Lack of Kinds
-
-Two types are compatible if they share the same dimensions. That is, they can be
-reduced to the same base unit equivalents. This can mean that some things may be
-compatible when the actually should not be:
-
-```ts
-setFrequency(hertz(100));
-setFrequency(becquerels(100));
-
-radiationAlarm(grays(2));
-radiationAlarm(sieverts(2));
-```
-
-_ISO 80000-1:2009(E)_ defines these as separate “kinds” but we currently provide
-no way to check for the kind of a quantity at compile time or runtime.
-
-In some cases we have taken the liberty to model the kind of a quantity as a
-different unit, specifically with planar angles and solid angles. While these
-are strictly a dimensionless quantity of `[L]/[L]` and `[L]^2/[L]^2`
-respectively, we model these as:
-
-```ts
-type Angle = { angle: 1 };
-type SolidAngle = { angle: 2 };
-```
 
 ### Lack of input flexibility
 

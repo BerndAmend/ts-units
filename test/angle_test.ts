@@ -5,6 +5,7 @@ import {
   atan2,
   cos,
   degrees,
+  gradians,
   radians,
   sin,
   tan,
@@ -20,6 +21,9 @@ describe("angle", () => {
     const equalUnits = [
       { a: turns(1), b: radians(2 * Math.PI) },
       { a: turns(1), b: degrees(360) },
+      { a: turns(1), b: degrees(360) },
+      { a: turns(1), b: gradians(400) },
+      { a: degrees(90), b: gradians(100) },
       { a: degrees(-30), b: radians(-Math.PI / 6) },
     ];
 

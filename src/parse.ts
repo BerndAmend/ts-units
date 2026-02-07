@@ -10,7 +10,8 @@ import type { Dimensions } from "./dimension.ts";
  */
 export function parse(
   input: string,
-  units: Record<string, Unit<number, Dimensions>> | Unit<number, Dimensions>[],
+  // deno-lint-ignore no-explicit-any
+  units: Record<string, Unit<number, any>> | Unit<number, any>[],
 ): Quantity<number, Dimensions> {
   const match = input.trim().match(/^([\d.,\s]+)\s*(.*)$/);
 

@@ -5,10 +5,13 @@ import { withValueType as intensityWithValueType } from "../intensity/mod.ts";
 import { withValueType as solidAngleWithValueType } from "../../angle/solid/mod.ts";
 
 /** A quantity of luminous flux. */
-export type Flux<NumberType = number> = Quantity<NumberType, dimension.Flux>;
+export type LuminousFlux<NumberType = number> = Quantity<
+  NumberType,
+  dimension.LuminousFlux
+>;
 
 /** A unit of luminous flux. */
-type FluxUnit<T> = Unit<T, dimension.Flux>;
+type LuminousFluxUnit<T> = Unit<T, dimension.LuminousFlux>;
 
 /**
  * Creates luminous flux units with a custom arithmetic type.
@@ -18,13 +21,13 @@ type FluxUnit<T> = Unit<T, dimension.Flux>;
 export function withValueType<NumberType>(
   arithmetic: Arithmetic<NumberType>,
 ): {
-  lumens: FluxUnit<NumberType>;
+  lumens: LuminousFluxUnit<NumberType>;
 } {
   const { candelas } = intensityWithValueType(arithmetic);
   const { steradians } = solidAngleWithValueType(arithmetic);
 
   /** The lumen, symbol `lm`, is the SI unit for luminous flux. */
-  const lumens: Unit<NumberType, dimension.Flux> = candelas
+  const lumens: Unit<NumberType, dimension.LuminousFlux> = candelas
     .times(steradians)
     .withSymbol("lm");
 

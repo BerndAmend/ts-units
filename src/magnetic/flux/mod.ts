@@ -7,10 +7,13 @@ import { withValueType as massWithValueType } from "../../mass/mod.ts";
 import { withValueType as timeWithValueType } from "../../time/mod.ts";
 
 /** A quantity of magnetic flux. */
-export type Flux<NumberType = number> = Quantity<NumberType, dimension.Flux>;
+export type MagneticFlux<NumberType = number> = Quantity<
+  NumberType,
+  dimension.MagneticFlux
+>;
 
 /** A unit of magnetic flux. */
-type MagneticFluxUnit<T> = Unit<T, dimension.Flux>;
+type MagneticFluxUnit<T> = Unit<T, dimension.MagneticFlux>;
 
 /**
  * Creates magnetic flux units with a custom arithmetic type.
@@ -28,7 +31,7 @@ export function withValueType<NumberType>(
   const { seconds } = timeWithValueType(arithmetic);
 
   /** The weber, symbol `Wb`, is the SI unit for magnetic flux. */
-  const webers: Unit<NumberType, dimension.Flux> = kilograms
+  const webers: Unit<NumberType, dimension.MagneticFlux> = kilograms
     .times(meters.squared())
     .per(seconds.squared())
     .per(amperes)

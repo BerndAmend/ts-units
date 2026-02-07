@@ -23,6 +23,11 @@ export function withValueType<NumberType>(
   arithmetic: Arithmetic<NumberType>,
 ): {
   joules: EnergyUnit<NumberType>;
+  kilojoules: EnergyUnit<NumberType>;
+  calories: EnergyUnit<NumberType>;
+  kilocalories: EnergyUnit<NumberType>;
+  kilowattHours: EnergyUnit<NumberType>;
+  electronvolts: EnergyUnit<NumberType>;
 } {
   const { meters } = lengthWithValueType(arithmetic);
   const { kilograms } = massWithValueType(arithmetic);
@@ -34,7 +39,29 @@ export function withValueType<NumberType>(
     .per(seconds.squared())
     .withSymbol("J");
 
-  return { joules };
+  /** One kilojoule equals 1000 joules. */
+  const kilojoules = joules.times(1000).withSymbol("kJ");
+
+  /** One calorie (small calorie) equals 4.184 joules. */
+  const calories = joules.times(4.184).withSymbol("cal");
+
+  /** One kilocalorie (Calorie, food calorie) equals 1000 calories. */
+  const kilocalories = calories.times(1000).withSymbol("kcal");
+
+  /** One kilowatt-hour equals 3.6 megajoules. */
+  const kilowattHours = joules.times(3.6e6).withSymbol("kWh");
+
+  /** One electronvolt equals 1.602176634e-19 joules. */
+  const electronvolts = joules.times(1.602176634e-19).withSymbol("eV");
+
+  return {
+    joules,
+    kilojoules,
+    calories,
+    kilocalories,
+    kilowattHours,
+    electronvolts,
+  };
 }
 
 const _units: ReturnType<typeof withValueType<number>> = withValueType(
@@ -43,3 +70,18 @@ const _units: ReturnType<typeof withValueType<number>> = withValueType(
 
 /** The joule, symbol `J`, is the SI unit for energy. */
 export const joules = _units.joules;
+
+/** One kilojoule equals 1000 joules. */
+export const kilojoules = _units.kilojoules;
+
+/** One calorie (small calorie) equals 4.184 joules. */
+export const calories = _units.calories;
+
+/** One kilocalorie (Calorie, food calorie) equals 1000 calories. */
+export const kilocalories = _units.kilocalories;
+
+/** One kilowatt-hour equals 3.6 megajoules. */
+export const kilowattHours = _units.kilowattHours;
+
+/** One electronvolt equals 1.602176634e-19 joules. */
+export const electronvolts = _units.electronvolts;

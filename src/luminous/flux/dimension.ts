@@ -1,9 +1,12 @@
+import type { Brand } from "../../dimension.ts";
+
 /**
  * The dimensions of the SI derived quantity of luminous flux.
  *
- * This would usually by `[J]` but we model solid angles using a dimension
- * (despite actually being a dimensionless quantity) in order to be able to
- * ensure type safety for angles.
+ * Denoted by `[J]`.
  */
-export type Flux = { luminousIntensity: 1; angle: 2 };
-export const Flux: Flux = { luminousIntensity: 1, angle: 2 };
+export type LuminousFlux = {
+  luminousIntensity: 1;
+  readonly [Brand]?: unique symbol;
+};
+export const LuminousFlux: LuminousFlux = { luminousIntensity: 1 };

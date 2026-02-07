@@ -18,7 +18,11 @@ export function withValueType<NumberType>(
 ): {
   kilograms: MassUnit<NumberType>;
   grams: MassUnit<NumberType>;
+  milligrams: MassUnit<NumberType>;
+  micrograms: MassUnit<NumberType>;
+  tonnes: MassUnit<NumberType>;
   pounds: MassUnit<NumberType>;
+  ounces: MassUnit<NumberType>;
 } {
   const { makeUnit } = makeUnitFactory(arithmetic);
 
@@ -31,10 +35,22 @@ export function withValueType<NumberType>(
   /** One gram equals 0.001 kilograms. */
   const grams = kilograms.times(1e-3).withSymbol("g");
 
-  /** One pound equals approximately 0.4536 kilograms. */
-  const pounds = kilograms.times(4.5359237e-1).withSymbol("lb");
+  /** One milligram equals 0.000001 kilograms. */
+  const milligrams = kilograms.times(1e-6).withSymbol("mg");
 
-  return { kilograms, grams, pounds };
+  /** One microgram equals 1e-9 kilograms. */
+  const micrograms = kilograms.times(1e-9).withSymbol("μg");
+
+  /** One tonne (metric ton) equals 1000 kilograms. */
+  const tonnes = kilograms.times(1000).withSymbol("t");
+
+  /** One pound equals approximately 0.4536 kilograms. */
+  const pounds = kilograms.times(0.45359237).withSymbol("lb");
+
+  /** One ounce equals 1/16 of a pound. */
+  const ounces = pounds.per(16).withSymbol("oz");
+
+  return { kilograms, grams, milligrams, micrograms, tonnes, pounds, ounces };
 }
 
 const _units: ReturnType<typeof withValueType<number>> = withValueType(
@@ -48,3 +64,18 @@ export const kilograms = _units.kilograms;
 
 /** One gram equals 0.001 kilograms. */
 export const grams = _units.grams;
+
+/** One milligram equals 0.000001 kilograms. */
+export const milligrams = _units.milligrams;
+
+/** One microgram equals 1e-9 kilograms. */
+export const micrograms = _units.micrograms;
+
+/** One tonne (metric ton) equals 1000 kilograms. */
+export const tonnes = _units.tonnes;
+
+/** One pound equals approximately 0.4536 kilograms. */
+export const pounds = _units.pounds;
+
+/** One ounce equals 1/16 of a pound. */
+export const ounces = _units.ounces;

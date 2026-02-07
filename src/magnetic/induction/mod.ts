@@ -6,13 +6,13 @@ import { withValueType as massWithValueType } from "../../mass/mod.ts";
 import { withValueType as timeWithValueType } from "../../time/mod.ts";
 
 /** A quantity of magnetic induction. */
-export type Induction<NumberType = number> = Quantity<
+export type MagneticInduction<NumberType = number> = Quantity<
   NumberType,
-  dimension.Induction
+  dimension.MagneticInduction
 >;
 
 /** A unit of magnetic induction. */
-type InductionUnit<T> = Unit<T, dimension.Induction>;
+type MagneticInductionUnit<T> = Unit<T, dimension.MagneticInduction>;
 
 /**
  * Creates magnetic induction units with a custom arithmetic type.
@@ -22,14 +22,14 @@ type InductionUnit<T> = Unit<T, dimension.Induction>;
 export function withValueType<NumberType>(
   arithmetic: Arithmetic<NumberType>,
 ): {
-  teslas: InductionUnit<NumberType>;
+  teslas: MagneticInductionUnit<NumberType>;
 } {
   const { amperes } = currentWithValueType(arithmetic);
   const { kilograms } = massWithValueType(arithmetic);
   const { seconds } = timeWithValueType(arithmetic);
 
   /** The tesla, symbol `T`, is the SI unit for magnetic induction. */
-  const teslas: Unit<NumberType, dimension.Induction> = kilograms
+  const teslas: Unit<NumberType, dimension.MagneticInduction> = kilograms
     .per(seconds.squared())
     .per(amperes)
     .withSymbol("T");
