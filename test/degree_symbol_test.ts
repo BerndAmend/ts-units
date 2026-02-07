@@ -1,7 +1,5 @@
 import { assertEquals } from "@std/assert";
 import { parse } from "../src/parse.ts";
-import { celsius, fahrenheit, kelvin } from "../src/temperature/mod.ts";
-import { degrees } from "../src/angle/mod.ts";
 import { allUnits } from "../src/mod.ts";
 
 Deno.test("parse handles degree symbols correctly", () => {
