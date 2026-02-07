@@ -10,20 +10,33 @@ export type Illuminance<NumberType = number> = Quantity<
   dimension.Illuminance
 >;
 
-export function withValueType<NumberType>(arithmetic: Arithmetic<NumberType>) {
+/** A unit of illuminance. */
+type IlluminanceUnit<T> = Unit<T, dimension.Illuminance>;
+
+/**
+ * Creates illuminance units with a custom arithmetic type.
+ * @param arithmetic The arithmetic implementation to use.
+ * @returns An object with illuminance unit definitions.
+ */
+export function withValueType<NumberType>(
+  arithmetic: Arithmetic<NumberType>,
+): {
+  lux: IlluminanceUnit<NumberType>;
+} {
   const { candelas } = intensityWithValueType(arithmetic);
   const { meters } = lengthWithValueType(arithmetic);
 
-  class WithValueType {
-    private constructor() {}
+  /** The lux, symbol `lx`, is the SI unit for illuminance. */
+  const lux: Unit<NumberType, dimension.Illuminance> = candelas
+    .per(meters.squared())
+    .withSymbol("lx");
 
-    /** The lux, symbol `lx`, is the SI unit for illuminance. */
-    static lux: Unit<NumberType, dimension.Illuminance> = candelas
-      .per(meters.squared())
-      .withSymbol("lx");
-  }
-
-  return WithValueType;
+  return { lux };
 }
 
-export const { lux } = withValueType(NativeArithmetic);
+const _units: ReturnType<typeof withValueType<number>> = withValueType(
+  NativeArithmetic,
+);
+
+/** The lux, symbol `lx`, is the SI unit for illuminance. */
+export const lux = _units.lux;

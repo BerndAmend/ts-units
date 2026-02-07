@@ -8,22 +8,35 @@ import { withValueType as timeWithValueType } from "../time/mod.ts";
 /** A quantity of force. */
 export type Force<NumberType = number> = Quantity<NumberType, dimension.Force>;
 
-export function withValueType<NumberType>(arithmetic: Arithmetic<NumberType>) {
+/** A unit of force. */
+type ForceUnit<T> = Unit<T, dimension.Force>;
+
+/**
+ * Creates force units with a custom arithmetic type.
+ * @param arithmetic The arithmetic implementation to use.
+ * @returns An object with force unit definitions.
+ */
+export function withValueType<NumberType>(
+  arithmetic: Arithmetic<NumberType>,
+): {
+  newtons: ForceUnit<NumberType>;
+} {
   const { kilograms } = massWithValueType(arithmetic);
   const { meters } = lengthWithValueType(arithmetic);
   const { seconds } = timeWithValueType(arithmetic);
 
-  class WithValueType {
-    private constructor() {}
+  /** The newton, symbol `N`, is the SI unit for force. */
+  const newtons: Unit<NumberType, dimension.Force> = kilograms
+    .times(meters)
+    .per(seconds.squared())
+    .withSymbol("N");
 
-    /** The newton, symbol `N`, is the SI unit for force. */
-    static newtons: Unit<NumberType, dimension.Force> = kilograms
-      .times(meters)
-      .per(seconds.squared())
-      .withSymbol("N");
-  }
-
-  return WithValueType;
+  return { newtons };
 }
 
-export const { newtons } = withValueType(NativeArithmetic);
+const _units: ReturnType<typeof withValueType<number>> = withValueType(
+  NativeArithmetic,
+);
+
+/** The newton, symbol `N`, is the SI unit for force. */
+export const newtons = _units.newtons;

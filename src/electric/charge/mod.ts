@@ -10,20 +10,33 @@ export type Charge<NumberType = number> = Quantity<
   dimension.Charge
 >;
 
-export function withValueType<NumberType>(arithmetic: Arithmetic<NumberType>) {
+/** A unit of electric charge. */
+type ChargeUnit<T> = Unit<T, dimension.Charge>;
+
+/**
+ * Creates electric charge units with a custom arithmetic type.
+ * @param arithmetic The arithmetic implementation to use.
+ * @returns An object with electric charge unit definitions.
+ */
+export function withValueType<NumberType>(
+  arithmetic: Arithmetic<NumberType>,
+): {
+  coulombs: ChargeUnit<NumberType>;
+} {
   const { amperes } = currentWithValueType(arithmetic);
   const { seconds } = timeWithValueType(arithmetic);
 
-  class WithValueType {
-    private constructor() {}
+  /** The coulomb, symbol `C`, is the SI unit for electric charge. */
+  const coulombs: Unit<NumberType, dimension.Charge> = amperes
+    .times(seconds)
+    .withSymbol("C");
 
-    /** The coulomb, symbol `C`, is the SI unit for electric charge. */
-    static coulombs: Unit<NumberType, dimension.Charge> = amperes
-      .times(seconds)
-      .withSymbol("C");
-  }
-
-  return WithValueType;
+  return { coulombs };
 }
 
-export const { coulombs } = withValueType(NativeArithmetic);
+const _units: ReturnType<typeof withValueType<number>> = withValueType(
+  NativeArithmetic,
+);
+
+/** The coulomb, symbol `C`, is the SI unit for electric charge. */
+export const coulombs = _units.coulombs;

@@ -12,24 +12,37 @@ export type Voltage<NumberType = number> = Quantity<
   dimension.Voltage
 >;
 
-export function withValueType<NumberType>(arithmetic: Arithmetic<NumberType>) {
+/** A unit of voltage. */
+type VoltageUnit<T> = Unit<T, dimension.Voltage>;
+
+/**
+ * Creates voltage units with a custom arithmetic type.
+ * @param arithmetic The arithmetic implementation to use.
+ * @returns An object with voltage unit definitions.
+ */
+export function withValueType<NumberType>(
+  arithmetic: Arithmetic<NumberType>,
+): {
+  volts: VoltageUnit<NumberType>;
+} {
   const { amperes } = currentWithValueType(arithmetic);
   const { meters } = lengthWithValueType(arithmetic);
   const { kilograms } = massWithValueType(arithmetic);
   const { seconds } = timeWithValueType(arithmetic);
 
-  class WithValueType {
-    private constructor() {}
+  /** The volt, symbol `V`, is the SI unit for voltage. */
+  const volts: Unit<NumberType, dimension.Voltage> = kilograms
+    .times(meters.squared())
+    .per(seconds.cubed())
+    .per(amperes)
+    .withSymbol("V");
 
-    /** The volt, symbol `V`, is the SI unit for voltage. */
-    static volts: Unit<NumberType, dimension.Voltage> = kilograms
-      .times(meters.squared())
-      .per(seconds.cubed())
-      .per(amperes)
-      .withSymbol("V");
-  }
-
-  return WithValueType;
+  return { volts };
 }
 
-export const { volts } = withValueType(NativeArithmetic);
+const _units: ReturnType<typeof withValueType<number>> = withValueType(
+  NativeArithmetic,
+);
+
+/** The volt, symbol `V`, is the SI unit for voltage. */
+export const volts = _units.volts;

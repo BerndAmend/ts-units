@@ -11,22 +11,35 @@ export type Induction<NumberType = number> = Quantity<
   dimension.Induction
 >;
 
-export function withValueType<NumberType>(arithmetic: Arithmetic<NumberType>) {
+/** A unit of magnetic induction. */
+type InductionUnit<T> = Unit<T, dimension.Induction>;
+
+/**
+ * Creates magnetic induction units with a custom arithmetic type.
+ * @param arithmetic The arithmetic implementation to use.
+ * @returns An object with magnetic induction unit definitions.
+ */
+export function withValueType<NumberType>(
+  arithmetic: Arithmetic<NumberType>,
+): {
+  teslas: InductionUnit<NumberType>;
+} {
   const { amperes } = currentWithValueType(arithmetic);
   const { kilograms } = massWithValueType(arithmetic);
   const { seconds } = timeWithValueType(arithmetic);
 
-  class WithValueType {
-    private constructor() {}
+  /** The tesla, symbol `T`, is the SI unit for magnetic induction. */
+  const teslas: Unit<NumberType, dimension.Induction> = kilograms
+    .per(seconds.squared())
+    .per(amperes)
+    .withSymbol("T");
 
-    /** The tesla, symbol `T`, is the SI unit for magnetic induction. */
-    static teslas: Unit<NumberType, dimension.Induction> = kilograms
-      .per(seconds.squared())
-      .per(amperes)
-      .withSymbol("T");
-  }
-
-  return WithValueType;
+  return { teslas };
 }
 
-export const { teslas } = withValueType(NativeArithmetic);
+const _units: ReturnType<typeof withValueType<number>> = withValueType(
+  NativeArithmetic,
+);
+
+/** The tesla, symbol `T`, is the SI unit for magnetic induction. */
+export const teslas = _units.teslas;

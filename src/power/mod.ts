@@ -8,22 +8,35 @@ import { withValueType as timeWithValueType } from "../time/mod.ts";
 /** A quantity of power. */
 export type Power<NumberType = number> = Quantity<NumberType, dimension.Power>;
 
-export function withValueType<NumberType>(arithmetic: Arithmetic<NumberType>) {
+/** A unit of power. */
+type PowerUnit<T> = Unit<T, dimension.Power>;
+
+/**
+ * Creates power units with a custom arithmetic type.
+ * @param arithmetic The arithmetic implementation to use.
+ * @returns An object with power unit definitions.
+ */
+export function withValueType<NumberType>(
+  arithmetic: Arithmetic<NumberType>,
+): {
+  watts: PowerUnit<NumberType>;
+} {
   const { meters } = lengthWithValueType(arithmetic);
   const { kilograms } = massWithValueType(arithmetic);
   const { seconds } = timeWithValueType(arithmetic);
 
-  class WithValueType {
-    private constructor() {}
+  /** The watt, symbol `W`, is the SI unit for power. */
+  const watts: Unit<NumberType, dimension.Power> = kilograms
+    .times(meters.squared())
+    .per(seconds.cubed())
+    .withSymbol("W");
 
-    /** The watt, symbol `W`, is the SI unit for power. */
-    static watts: Unit<NumberType, dimension.Power> = kilograms
-      .times(meters.squared())
-      .per(seconds.cubed())
-      .withSymbol("W");
-  }
-
-  return WithValueType;
+  return { watts };
 }
 
-export const { watts } = withValueType(NativeArithmetic);
+const _units: ReturnType<typeof withValueType<number>> = withValueType(
+  NativeArithmetic,
+);
+
+/** The watt, symbol `W`, is the SI unit for power. */
+export const watts = _units.watts;
