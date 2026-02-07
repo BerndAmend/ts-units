@@ -82,15 +82,15 @@ length.toLocaleString("en-US"); // "1,234.5 m"
 
 ### Parsing
 
-You can parse strings back into quantities using `parseQuantity`. You need to
+You can parse strings back into quantities using `parse`. You need to
 provide a list or object of allowed units to ensure safety.
 
 ```ts
-import { parseQuantity } from "@bernd/ts-units/parse";
+import { parse } from "@bernd/ts-units/parse";
 import { kilometers, meters } from "@bernd/ts-units/length";
 
-const q1 = parseQuantity("10 m", [meters, kilometers]);
-const q2 = parseQuantity("5.5 km", [meters, kilometers]);
+const q1 = parse("10 m", [meters, kilometers]);
+const q2 = parse("5.5 km", [meters, kilometers]);
 ```
 
 ### Conversion

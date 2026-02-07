@@ -35,7 +35,8 @@
     "./temperature": "./src/temperature/mod.ts",
     "./time": "./src/time/mod.ts",
     "./volume": "./src/volume/mod.ts",
-    ".": "./src/mod.ts"
+    ".": "./src/mod.ts",
+    "./base": "./src/base.ts"
   },
   "imports": {
     "@std/async": "jsr:@std/async@^1.0.15",

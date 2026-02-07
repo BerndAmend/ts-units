@@ -33,17 +33,17 @@ export function withValueType<NumberType>(
   const kelvin = makeUnit("K", dimension.Temperature);
 
   /** Degrees Celsius, offset from kelvin by -273.15. */
-  const celsius = kelvin.withOffset(-273.15).withSymbol("ºC");
+  const celsius = kelvin.withOffset(-273.15).withSymbol("°C");
 
   /** Degrees Fahrenheit, uses 5/9 scale and -459.67 offset. */
   const fahrenheit = kelvin
     .times(5)
     .per(9)
     .withOffset(-459.67)
-    .withSymbol("ºF");
+    .withSymbol("°F");
 
   /** Degrees Rankine, uses 1/1.8 scale. */
-  const rankine = kelvin.per(1.8).withSymbol("ºR");
+  const rankine = kelvin.per(1.8).withSymbol("°R");
 
   return { kelvin, celsius, fahrenheit, rankine };
 }
