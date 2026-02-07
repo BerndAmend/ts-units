@@ -187,7 +187,7 @@ squareMeters
 ### Electrical Capacitance
 
 ```ts
-import { Capacitance, microfarads } from "@bernd/ts-units/eletric/capacitance";
+import { Capacitance, microfarads } from "@bernd/ts-units/electric/capacitance";
 const capacitance: Capacitance = microfarads(4700);
 ```
 
@@ -197,7 +197,7 @@ farads, microfarads, nanofarads, picofarads
 ### Electric Charge
 
 ```ts
-import { Charge, coulombs } from "@bernd/ts-units/eletric/charge";
+import { Charge, coulombs } from "@bernd/ts-units/electric/charge";
 const charge: Charge = coulombs(5000);
 ```
 
@@ -207,7 +207,7 @@ coulombs
 ### Electrical Conductance
 
 ```ts
-import { Conductance, siemens } from "@bernd/ts-units/eletric/conductance";
+import { Conductance, siemens } from "@bernd/ts-units/electric/conductance";
 const conductance: Conductance = siemens(0.2);
 ```
 
@@ -217,7 +217,7 @@ siemens
 ### Electrical Current
 
 ```ts
-import { amperes, Current } from "@bernd/ts-units/eletric/current";
+import { amperes, Current } from "@bernd/ts-units/electric/current";
 const current: Current = amperes(10);
 ```
 
@@ -227,7 +227,7 @@ amperes
 ### Electrical Inductance
 
 ```ts
-import { henries, Inductance } from "@bernd/ts-units/eletric/inductance";
+import { henries, Inductance } from "@bernd/ts-units/electric/inductance";
 const inductance: Inductance = henries(1);
 ```
 
@@ -237,7 +237,7 @@ henries
 ### Electrical Resistance
 
 ```ts
-import { ohms, Resistance } from "@bernd/ts-units/eletric/resistance";
+import { ohms, Resistance } from "@bernd/ts-units/electric/resistance";
 const resistance: Resistance = ohms(560);
 ```
 
@@ -247,7 +247,7 @@ ohms
 ### Electric Voltage
 
 ```ts
-import { Voltage, volts } from "@bernd/ts-units/eletric/voltage";
+import { Voltage, volts } from "@bernd/ts-units/electric/voltage";
 const voltage: Voltage = volts(220);
 ```
 
