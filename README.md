@@ -82,8 +82,8 @@ length.toLocaleString("en-US"); // "1,234.5 m"
 
 ### Parsing
 
-You can parse strings back into quantities using `parse`. You need to
-provide a list or object of allowed units to ensure safety.
+You can parse strings back into quantities using `parse`. You need to provide a
+list or object of allowed units to ensure safety.
 
 ```ts
 import { parse } from "@bernd/ts-units/parse";
