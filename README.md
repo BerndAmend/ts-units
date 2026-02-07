@@ -68,6 +68,31 @@ const html = `<span class="amount">${temp.amount.toFixed(1)}</span>` +
   `<span class="symbol">${temp.unit.symbol}</span>`;
 ```
 
+const html = `<span class="amount">${temp.amount.toFixed(1)}</span>` +
+`<span class="symbol">${temp.unit.symbol}</span>`;
+
+````
+You can also use `toLocaleString` for locale-aware formatting:
+
+```ts
+const length = meters(1234.5);
+length.toLocaleString("de-DE"); // "1.234,5 m"
+length.toLocaleString("en-US"); // "1,234.5 m"
+````
+
+### Parsing
+
+You can parse strings back into quantities using `parseQuantity`. You need to
+provide a list or object of allowed units to ensure safety.
+
+```ts
+import { parseQuantity } from "@bernd/ts-units/parse";
+import { kilometers, meters } from "@bernd/ts-units/length";
+
+const q1 = parseQuantity("10 m", [meters, kilometers]);
+const q2 = parseQuantity("5.5 km", [meters, kilometers]);
+```
+
 ### Conversion
 
 Quantities can easily be converted from one unit to another using the `in`

@@ -361,6 +361,10 @@ export interface Quantity<NumberType, D extends Dimensions> {
    * ```
    */
   toString(): string;
+  toLocaleString(
+    locales?: string | string[],
+    options?: Intl.NumberFormatOptions,
+  ): string;
 
   /**
    * Returns the amount of this quantity in the base unit as a NumberType
@@ -802,9 +806,16 @@ export const makeUnitFactory = <NumberType>(
     }
 
     toString() {
+      return this.toLocaleString(DEFAULT_LOCALE);
+    }
+
+    toLocaleString(
+      locales?: string | string[],
+      options?: Intl.NumberFormatOptions,
+    ) {
       return `${
-        toNative(this.amount).toLocaleString(DEFAULT_LOCALE)
-      }${this.unit.symbol}`;
+        toNative(this.amount).toLocaleString(locales, options)
+      } ${this.unit.symbol}`;
     }
 
     valueOf() {
