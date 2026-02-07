@@ -20,7 +20,7 @@ export interface Arithmetic<NumberType> {
   pow(base: NumberType, exponent: NumberType): NumberType;
   abs(value: NumberType): NumberType;
   // 1 => left > right
-  // 0 => left === 0
+  // 0 => left === right
   // -1 => left < right
   compare(left: NumberType, right: NumberType): number;
 }

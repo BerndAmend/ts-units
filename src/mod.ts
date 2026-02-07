@@ -14,7 +14,8 @@ export {
   seconds,
   usec,
 } from "./time/mod.ts";
-export { pascals } from "./pressure/mod.ts";
+export { mole } from "./amountOfSubstance/mod.ts";
+export { atmospheres, bar, millibar, pascals, psi } from "./pressure/mod.ts";
 export { squareMeters } from "./area/mod.ts";
 export { squareDegrees, steradians } from "./angle/solid/mod.ts";
 export {
@@ -24,6 +25,7 @@ export {
   atan2,
   cos,
   degrees,
+  gradians,
   radians,
   sin,
   tan,
@@ -49,8 +51,22 @@ export { teslas } from "./magnetic/induction/mod.ts";
 export { candelas } from "./luminous/intensity/mod.ts";
 export { lux } from "./luminous/illuminance/mod.ts";
 export { lumens } from "./luminous/flux/mod.ts";
-export { joules } from "./energy/mod.ts";
-export { cubicMeters } from "./volume/mod.ts";
+export {
+  calories,
+  electronvolts,
+  joules,
+  kilocalories,
+  kilojoules,
+  kilowattHours,
+} from "./energy/mod.ts";
+export {
+  cubicMeters,
+  cups,
+  fluidOunces,
+  gallons,
+  liters,
+  milliliters,
+} from "./volume/mod.ts";
 export {
   angstroms,
   astronomicalUnits,
@@ -75,7 +91,15 @@ export {
 } from "./length/mod.ts";
 export { celsius, fahrenheit, kelvin, rankine } from "./temperature/mod.ts";
 export { percent, permille, permyriad, scalar } from "./scalar/mod.ts";
-export { grams, kilograms } from "./mass/mod.ts";
+export {
+  grams,
+  kilograms,
+  micrograms,
+  milligrams,
+  ounces,
+  pounds,
+  tonnes,
+} from "./mass/mod.ts";
 export { watts } from "./power/mod.ts";
 export { degreesPerSecond, radiansPerSecond } from "./angularSpeed/mod.ts";
 export { newtons } from "./force/mod.ts";
@@ -90,36 +114,37 @@ export { metersPerSecondSquared } from "./acceleration/mod.ts";
 
 // Import all for the array
 import * as unit_ns_0 from "./time/mod.ts";
-import * as unit_ns_1 from "./pressure/mod.ts";
-import * as unit_ns_2 from "./area/mod.ts";
-import * as unit_ns_3 from "./angle/solid/mod.ts";
-import * as unit_ns_4 from "./angle/mod.ts";
-import * as unit_ns_5 from "./radioactive/decay/mod.ts";
-import * as unit_ns_6 from "./radioactive/dose/mod.ts";
-import * as unit_ns_7 from "./electric/resistance/mod.ts";
-import * as unit_ns_8 from "./electric/current/mod.ts";
-import * as unit_ns_9 from "./electric/conductance/mod.ts";
-import * as unit_ns_10 from "./electric/capacitance/mod.ts";
-import * as unit_ns_11 from "./electric/charge/mod.ts";
-import * as unit_ns_12 from "./electric/inductance/mod.ts";
-import * as unit_ns_13 from "./electric/voltage/mod.ts";
-import * as unit_ns_14 from "./frequency/mod.ts";
-import * as unit_ns_15 from "./magnetic/flux/mod.ts";
-import * as unit_ns_16 from "./magnetic/induction/mod.ts";
-import * as unit_ns_17 from "./luminous/intensity/mod.ts";
-import * as unit_ns_18 from "./luminous/illuminance/mod.ts";
-import * as unit_ns_19 from "./luminous/flux/mod.ts";
-import * as unit_ns_20 from "./energy/mod.ts";
-import * as unit_ns_21 from "./volume/mod.ts";
-import * as unit_ns_22 from "./length/mod.ts";
-import * as unit_ns_23 from "./temperature/mod.ts";
-import * as unit_ns_24 from "./scalar/mod.ts";
-import * as unit_ns_25 from "./mass/mod.ts";
-import * as unit_ns_26 from "./power/mod.ts";
-import * as unit_ns_27 from "./angularSpeed/mod.ts";
-import * as unit_ns_28 from "./force/mod.ts";
-import * as unit_ns_29 from "./speed/mod.ts";
-import * as unit_ns_30 from "./acceleration/mod.ts";
+import * as unit_ns_1 from "./amountOfSubstance/mod.ts";
+import * as unit_ns_2 from "./pressure/mod.ts";
+import * as unit_ns_3 from "./area/mod.ts";
+import * as unit_ns_4 from "./angle/solid/mod.ts";
+import * as unit_ns_5 from "./angle/mod.ts";
+import * as unit_ns_6 from "./radioactive/decay/mod.ts";
+import * as unit_ns_7 from "./radioactive/dose/mod.ts";
+import * as unit_ns_8 from "./electric/resistance/mod.ts";
+import * as unit_ns_9 from "./electric/current/mod.ts";
+import * as unit_ns_10 from "./electric/conductance/mod.ts";
+import * as unit_ns_11 from "./electric/capacitance/mod.ts";
+import * as unit_ns_12 from "./electric/charge/mod.ts";
+import * as unit_ns_13 from "./electric/inductance/mod.ts";
+import * as unit_ns_14 from "./electric/voltage/mod.ts";
+import * as unit_ns_15 from "./frequency/mod.ts";
+import * as unit_ns_16 from "./magnetic/flux/mod.ts";
+import * as unit_ns_17 from "./magnetic/induction/mod.ts";
+import * as unit_ns_18 from "./luminous/intensity/mod.ts";
+import * as unit_ns_19 from "./luminous/illuminance/mod.ts";
+import * as unit_ns_20 from "./luminous/flux/mod.ts";
+import * as unit_ns_21 from "./energy/mod.ts";
+import * as unit_ns_22 from "./volume/mod.ts";
+import * as unit_ns_23 from "./length/mod.ts";
+import * as unit_ns_24 from "./temperature/mod.ts";
+import * as unit_ns_25 from "./scalar/mod.ts";
+import * as unit_ns_26 from "./mass/mod.ts";
+import * as unit_ns_27 from "./power/mod.ts";
+import * as unit_ns_28 from "./angularSpeed/mod.ts";
+import * as unit_ns_29 from "./force/mod.ts";
+import * as unit_ns_30 from "./speed/mod.ts";
+import * as unit_ns_31 from "./acceleration/mod.ts";
 
 /**
  * An array of all units in the library.
@@ -136,74 +161,95 @@ export const allUnits: Unit<number, any>[] = [
   unit_ns_0.s,
   unit_ns_0.seconds,
   unit_ns_0.usec,
-  unit_ns_1.pascals,
-  unit_ns_2.squareMeters,
-  unit_ns_3.squareDegrees,
-  unit_ns_3.steradians,
-  unit_ns_4.degrees,
-  unit_ns_4.radians,
-  unit_ns_4.turns,
-  unit_ns_5.becquerels,
-  unit_ns_6.grays,
-  unit_ns_6.sieverts,
-  unit_ns_7.ohms,
-  unit_ns_8.amperes,
-  unit_ns_9.siemens,
-  unit_ns_10.farads,
-  unit_ns_10.microfarads,
-  unit_ns_10.nanofarads,
-  unit_ns_10.picofarads,
-  unit_ns_11.coulombs,
-  unit_ns_12.henries,
-  unit_ns_13.volts,
-  unit_ns_14.hertz,
-  unit_ns_15.webers,
-  unit_ns_16.teslas,
-  unit_ns_17.candelas,
-  unit_ns_18.lux,
-  unit_ns_19.lumens,
-  unit_ns_20.joules,
-  unit_ns_21.cubicMeters,
-  unit_ns_22.angstroms,
-  unit_ns_22.astronomicalUnits,
-  unit_ns_22.centimeters,
-  unit_ns_22.chains,
-  unit_ns_22.fathoms,
-  unit_ns_22.feet,
-  unit_ns_22.femtometers,
-  unit_ns_22.fermi,
-  unit_ns_22.furlongs,
-  unit_ns_22.inches,
-  unit_ns_22.kilometers,
-  unit_ns_22.meters,
-  unit_ns_22.micrometers,
-  unit_ns_22.microns,
-  unit_ns_22.miles,
-  unit_ns_22.millimeters,
-  unit_ns_22.nanometers,
-  unit_ns_22.nauticalMiles,
-  unit_ns_22.picometers,
-  unit_ns_22.yards,
-  unit_ns_23.celsius,
-  unit_ns_23.fahrenheit,
-  unit_ns_23.kelvin,
-  unit_ns_23.rankine,
-  unit_ns_24.percent,
-  unit_ns_24.permille,
-  unit_ns_24.permyriad,
-  unit_ns_24.scalar,
-  unit_ns_25.grams,
-  unit_ns_25.kilograms,
-  unit_ns_26.watts,
-  unit_ns_27.degreesPerSecond,
-  unit_ns_27.radiansPerSecond,
-  unit_ns_28.newtons,
-  unit_ns_29.feetPerSecond,
-  unit_ns_29.kilometersPerHour,
-  unit_ns_29.knots,
-  unit_ns_29.metersPerSecond,
-  unit_ns_29.milesPerHour,
-  unit_ns_30.metersPerSecondSquared,
+  unit_ns_1.mole,
+  unit_ns_2.atmospheres,
+  unit_ns_2.bar,
+  unit_ns_2.millibar,
+  unit_ns_2.pascals,
+  unit_ns_2.psi,
+  unit_ns_3.squareMeters,
+  unit_ns_4.squareDegrees,
+  unit_ns_4.steradians,
+  unit_ns_5.degrees,
+  unit_ns_5.gradians,
+  unit_ns_5.radians,
+  unit_ns_5.turns,
+  unit_ns_6.becquerels,
+  unit_ns_7.grays,
+  unit_ns_7.sieverts,
+  unit_ns_8.ohms,
+  unit_ns_9.amperes,
+  unit_ns_10.siemens,
+  unit_ns_11.farads,
+  unit_ns_11.microfarads,
+  unit_ns_11.nanofarads,
+  unit_ns_11.picofarads,
+  unit_ns_12.coulombs,
+  unit_ns_13.henries,
+  unit_ns_14.volts,
+  unit_ns_15.hertz,
+  unit_ns_16.webers,
+  unit_ns_17.teslas,
+  unit_ns_18.candelas,
+  unit_ns_19.lux,
+  unit_ns_20.lumens,
+  unit_ns_21.calories,
+  unit_ns_21.electronvolts,
+  unit_ns_21.joules,
+  unit_ns_21.kilocalories,
+  unit_ns_21.kilojoules,
+  unit_ns_21.kilowattHours,
+  unit_ns_22.cubicMeters,
+  unit_ns_22.cups,
+  unit_ns_22.fluidOunces,
+  unit_ns_22.gallons,
+  unit_ns_22.liters,
+  unit_ns_22.milliliters,
+  unit_ns_23.angstroms,
+  unit_ns_23.astronomicalUnits,
+  unit_ns_23.centimeters,
+  unit_ns_23.chains,
+  unit_ns_23.fathoms,
+  unit_ns_23.feet,
+  unit_ns_23.femtometers,
+  unit_ns_23.fermi,
+  unit_ns_23.furlongs,
+  unit_ns_23.inches,
+  unit_ns_23.kilometers,
+  unit_ns_23.meters,
+  unit_ns_23.micrometers,
+  unit_ns_23.microns,
+  unit_ns_23.miles,
+  unit_ns_23.millimeters,
+  unit_ns_23.nanometers,
+  unit_ns_23.nauticalMiles,
+  unit_ns_23.picometers,
+  unit_ns_23.yards,
+  unit_ns_24.celsius,
+  unit_ns_24.fahrenheit,
+  unit_ns_24.kelvin,
+  unit_ns_24.rankine,
+  unit_ns_25.percent,
+  unit_ns_25.permille,
+  unit_ns_25.permyriad,
+  unit_ns_25.scalar,
+  unit_ns_26.grams,
+  unit_ns_26.kilograms,
+  unit_ns_26.micrograms,
+  unit_ns_26.milligrams,
+  unit_ns_26.ounces,
+  unit_ns_26.pounds,
+  unit_ns_26.tonnes,
+  unit_ns_27.watts,
+  unit_ns_28.degreesPerSecond,
+  unit_ns_28.radiansPerSecond,
+  unit_ns_29.newtons,
+  unit_ns_30.feetPerSecond,
+  unit_ns_30.kilometersPerHour,
+  unit_ns_30.knots,
+  unit_ns_30.metersPerSecond,
+  unit_ns_30.milesPerHour,
+  unit_ns_31.metersPerSecondSquared,
 ];
 
 export function parse(input: string): Quantity<number, Dimensions> {

@@ -21,6 +21,7 @@ export function withValueType<NumberType>(
 ): {
   radians: AngleUnit<NumberType>;
   degrees: AngleUnit<NumberType>;
+  gradians: AngleUnit<NumberType>;
   turns: AngleUnit<NumberType>;
   sin: (x: Angle<NumberType>) => NumberType;
   cos: (x: Angle<NumberType>) => NumberType;
@@ -47,6 +48,7 @@ export function withValueType<NumberType>(
 
   /** One degree equals π/180 radians. */
   const degrees = radians.times(Math.PI).per(180).withSymbol("°");
+  const gradians = radians.times(Math.PI).per(200).withSymbol("gon");
 
   /** One turn equals 2π radians. */
   const turns = radians.times(2).times(Math.PI).withSymbol("τ");
@@ -111,6 +113,7 @@ export function withValueType<NumberType>(
   return {
     radians,
     degrees,
+    gradians,
     turns,
     sin,
     cos,
@@ -125,6 +128,7 @@ export function withValueType<NumberType>(
 const _units: {
   radians: Unit<number, dimension.Angle>;
   degrees: Unit<number, dimension.Angle>;
+  gradians: Unit<number, dimension.Angle>;
   turns: Unit<number, dimension.Angle>;
   sin: (x: Angle<number>) => number;
   cos: (x: Angle<number>) => number;
@@ -143,6 +147,9 @@ export const degrees = _units.degrees;
 
 /** One turn equals 2π radians. */
 export const turns = _units.turns;
+
+/** One gradian equals π/200 radians. */
+export const gradians = _units.gradians;
 
 /**
  * Returns the sine of an angle.

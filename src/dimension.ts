@@ -19,7 +19,19 @@ import type { Exponent } from "./exponent.ts";
  * (`[L]^2/[L]^2`) collapse to `[1]` and therefore cannot be distinguished in
  * variable assignments.
  */
-export type Dimensions = Readonly<Record<string, Exponent>>;
+export const Brand: unique symbol = Symbol("Brand");
+
+export interface Branding {
+  readonly [Brand]?: symbol;
+}
+
+export type Dimensions =
+  & Readonly<
+    {
+      [key: string]: Exponent;
+    }
+  >
+  & Branding;
 
 /**
  * The dimensions of a dimensionless quantity. Also known as the dimensions of
@@ -51,8 +63,8 @@ export const One: One = {};
  */
 export type Times<A extends Dimensions, B extends Multiplicand<A>> = {
   [
-    K in keyof A | keyof B as exp.Add<Get<A, K>, Get<B, K>> extends undefined
-      ? never
+    K in keyof A | keyof B as K extends typeof Brand ? never
+      : exp.Add<Get<A, K>, Get<B, K>> extends undefined ? never
       : K
   ]: exp.Add<Get<A, K>, Get<B, K>>;
 };
@@ -83,7 +95,9 @@ export function Times<A extends Dimensions, B extends Multiplicand<A>>(
 export type Multiplicand<A extends Dimensions> =
   & Partial<
     {
-      [K in keyof A]: exp.Addable<Get<A, K>>;
+      [K in keyof A as K extends typeof Brand ? never : K]: exp.Addable<
+        Get<A, K>
+      >;
     }
   >
   & Dimensions;
@@ -109,10 +123,8 @@ export type Multiplicand<A extends Dimensions> =
  */
 export type Over<A extends Dimensions, B extends Divisor<A>> = {
   [
-    K in keyof A | keyof B as exp.Subtract<
-      Get<A, K>,
-      Get<B, K>
-    > extends undefined ? never
+    K in keyof A | keyof B as K extends typeof Brand ? never
+      : exp.Subtract<Get<A, K>, Get<B, K>> extends undefined ? never
       : K
   ]: exp.Subtract<Get<A, K>, Get<B, K>>;
 };
@@ -143,7 +155,9 @@ export function Over<A extends Dimensions, B extends Divisor<A>>(
 export type Divisor<A extends Dimensions> =
   & Partial<
     {
-      [K in keyof A]: exp.Subtractable<Get<A, K>>;
+      [K in keyof A as K extends typeof Brand ? never : K]: exp.Subtractable<
+        Get<A, K>
+      >;
     }
   >
   & Dimensions;
@@ -166,7 +180,7 @@ export type Divisor<A extends Dimensions> =
  * ```
  */
 export type Reciprocal<X extends Dimensions> = {
-  [K in keyof X]: exp.Negate<Get<X, K>>;
+  [K in keyof X as K extends typeof Brand ? never : K]: exp.Negate<Get<X, K>>;
 };
 
 export function Reciprocal<X extends Dimensions>(x: X): Reciprocal<X> {
@@ -191,7 +205,7 @@ export function Reciprocal<X extends Dimensions>(x: X): Reciprocal<X> {
  * ```
  */
 export type Squared<X extends Dimensions> = {
-  [K in keyof X]: exp.Double<Get<X, K>>;
+  [K in keyof X as K extends typeof Brand ? never : K]: exp.Double<Get<X, K>>;
 };
 
 export function Squared<X extends Dimensions>(x: X): Squared<X> {
@@ -216,7 +230,7 @@ export function Squared<X extends Dimensions>(x: X): Squared<X> {
  * ```
  */
 export type Cubed<X extends Dimensions> = {
-  [K in keyof X]: exp.Triple<Get<X, K>>;
+  [K in keyof X as K extends typeof Brand ? never : K]: exp.Triple<Get<X, K>>;
 };
 
 export function Cubed<X extends Dimensions>(x: X): Cubed<X> {
@@ -236,7 +250,8 @@ export function Cubed<X extends Dimensions>(x: X): Cubed<X> {
  *   //   ^ undefined
  * ```
  */
-type Get<D extends Dimensions, K> = K extends keyof D ? D[K] : undefined;
+type Get<D extends Dimensions, K> = K extends keyof D ? D[K]
+  : undefined;
 
 function combineExponents(
   d1: Dimensions,
@@ -244,19 +259,25 @@ function combineExponents(
   f: (e1: number, e2: number) => number,
 ): Dimensions {
   const keys = new Set<string>();
-  Object.keys(d1).forEach((x) => keys.add(x));
-  Object.keys(d2).forEach((x) => keys.add(x));
+  Object.keys(d1).forEach((x) => {
+    if (x !== "_brand") keys.add(x);
+  });
+  Object.keys(d2).forEach((x) => {
+    if (x !== "_brand") keys.add(x);
+  });
 
   const ret: Record<string, Exponent> = {};
   for (const key of keys) {
-    const val = f(d1[key] || 0, d2[key] || 0);
+    const v1 = d1[key] as Exponent;
+    const v2 = d2[key] as Exponent;
+    const val = f(v1 || 0, v2 || 0);
     if (!val) {
       continue;
     }
 
     if (!exp.isExponent(val)) {
       throw new Error(
-        `Overflow in ${key} when combining ${d1[key]} and ${d2[key]}`,
+        `Overflow in ${key} when combining ${v1} and ${v2}`,
       );
     }
 
