@@ -12,24 +12,37 @@ export type Inductance<NumberType = number> = Quantity<
   dimension.Inductance
 >;
 
-export function withValueType<NumberType>(arithmetic: Arithmetic<NumberType>) {
+/** A unit of electrical inductance. */
+type InductanceUnit<T> = Unit<T, dimension.Inductance>;
+
+/**
+ * Creates electrical inductance units with a custom arithmetic type.
+ * @param arithmetic The arithmetic implementation to use.
+ * @returns An object with electrical inductance unit definitions.
+ */
+export function withValueType<NumberType>(
+  arithmetic: Arithmetic<NumberType>,
+): {
+  henries: InductanceUnit<NumberType>;
+} {
   const { amperes } = currentWithValueType(arithmetic);
   const { meters } = lengthWithValueType(arithmetic);
   const { kilograms } = massWithValueType(arithmetic);
   const { seconds } = timeWithValueType(arithmetic);
 
-  class WithValueType {
-    private constructor() {}
+  /** The henry, symbol `H`, is the SI unit for electrical inductance. */
+  const henries: Unit<NumberType, dimension.Inductance> = kilograms
+    .times(meters.squared())
+    .per(seconds.squared())
+    .per(amperes.squared())
+    .withSymbol("H");
 
-    /** The henry, symbol `H`, is the SI unit for electrical inductance. */
-    static henries: Unit<NumberType, dimension.Inductance> = kilograms
-      .times(meters.squared())
-      .per(seconds.squared())
-      .per(amperes.squared())
-      .withSymbol("H");
-  }
-
-  return WithValueType;
+  return { henries };
 }
 
-export const { henries } = withValueType(NativeArithmetic);
+const _units: ReturnType<typeof withValueType<number>> = withValueType(
+  NativeArithmetic,
+);
+
+/** The henry, symbol `H`, is the SI unit for electrical inductance. */
+export const henries = _units.henries;

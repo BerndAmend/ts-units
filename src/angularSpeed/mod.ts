@@ -11,29 +11,45 @@ export type AngularSpeed<NumberType = number> = Quantity<
   dimension.AngularSpeed
 >;
 
+/** A unit of angular speed. */
+type AngularSpeedUnit<T> = Unit<T, dimension.AngularSpeed>;
+
+/**
+ * Creates angular speed units with a custom arithmetic type.
+ * @param arithmetic The arithmetic implementation to use.
+ * @param geometric The geometric implementation to use.
+ * @returns An object with angular speed unit definitions.
+ */
 export function withValueType<NumberType>(
   arithmetic: Arithmetic<NumberType>,
   geometric: Geometric<NumberType>,
-) {
+): {
+  radiansPerSecond: AngularSpeedUnit<NumberType>;
+  degreesPerSecond: AngularSpeedUnit<NumberType>;
+} {
   const { radians, degrees } = angleWithValueType(arithmetic, geometric);
   const { seconds } = timeWithValueType(arithmetic);
 
-  class WithValueType {
-    private constructor() {}
+  /** Radians per second. */
+  const radiansPerSecond: Unit<NumberType, dimension.AngularSpeed> = radians
+    .per(seconds)
+    .withSymbol("rad/s");
 
-    static radiansPerSecond: Unit<NumberType, dimension.AngularSpeed> = radians
-      .per(seconds)
-      .withSymbol("rad/s");
+  /** Degrees per second. */
+  const degreesPerSecond: Unit<NumberType, dimension.AngularSpeed> = degrees
+    .per(seconds)
+    .withSymbol("°/s");
 
-    static degreesPerSecond: Unit<NumberType, dimension.AngularSpeed> = degrees
-      .per(seconds)
-      .withSymbol("°/s");
-  }
-
-  return WithValueType;
+  return { radiansPerSecond, degreesPerSecond };
 }
 
-export const {
-  radiansPerSecond,
-  degreesPerSecond,
+const _units: {
+  radiansPerSecond: Unit<number, dimension.AngularSpeed>;
+  degreesPerSecond: Unit<number, dimension.AngularSpeed>;
 } = withValueType(NativeArithmetic, NativeGeometric);
+
+/** Radians per second. */
+export const radiansPerSecond = _units.radiansPerSecond;
+
+/** Degrees per second. */
+export const degreesPerSecond = _units.degreesPerSecond;

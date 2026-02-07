@@ -9,24 +9,37 @@ import { withValueType as timeWithValueType } from "../../time/mod.ts";
 /** A quantity of magnetic flux. */
 export type Flux<NumberType = number> = Quantity<NumberType, dimension.Flux>;
 
-export function withValueType<NumberType>(arithmetic: Arithmetic<NumberType>) {
+/** A unit of magnetic flux. */
+type MagneticFluxUnit<T> = Unit<T, dimension.Flux>;
+
+/**
+ * Creates magnetic flux units with a custom arithmetic type.
+ * @param arithmetic The arithmetic implementation to use.
+ * @returns An object with magnetic flux unit definitions.
+ */
+export function withValueType<NumberType>(
+  arithmetic: Arithmetic<NumberType>,
+): {
+  webers: MagneticFluxUnit<NumberType>;
+} {
   const { amperes } = currentWithValueType(arithmetic);
   const { meters } = lengthWithValueType(arithmetic);
   const { kilograms } = massWithValueType(arithmetic);
   const { seconds } = timeWithValueType(arithmetic);
 
-  class WithValueType {
-    private constructor() {}
+  /** The weber, symbol `Wb`, is the SI unit for magnetic flux. */
+  const webers: Unit<NumberType, dimension.Flux> = kilograms
+    .times(meters.squared())
+    .per(seconds.squared())
+    .per(amperes)
+    .withSymbol("Wb");
 
-    /** The weber, symbol `Wb`, is the SI unit for magnetic flux. */
-    static webers: Unit<NumberType, dimension.Flux> = kilograms
-      .times(meters.squared())
-      .per(seconds.squared())
-      .per(amperes)
-      .withSymbol("Wb");
-  }
-
-  return WithValueType;
+  return { webers };
 }
 
-export const { webers } = withValueType(NativeArithmetic);
+const _units: ReturnType<typeof withValueType<number>> = withValueType(
+  NativeArithmetic,
+);
+
+/** The weber, symbol `Wb`, is the SI unit for magnetic flux. */
+export const webers = _units.webers;

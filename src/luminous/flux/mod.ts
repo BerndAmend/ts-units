@@ -7,20 +7,33 @@ import { withValueType as solidAngleWithValueType } from "../../angle/solid/mod.
 /** A quantity of luminous flux. */
 export type Flux<NumberType = number> = Quantity<NumberType, dimension.Flux>;
 
-export function withValueType<NumberType>(arithmetic: Arithmetic<NumberType>) {
+/** A unit of luminous flux. */
+type FluxUnit<T> = Unit<T, dimension.Flux>;
+
+/**
+ * Creates luminous flux units with a custom arithmetic type.
+ * @param arithmetic The arithmetic implementation to use.
+ * @returns An object with luminous flux unit definitions.
+ */
+export function withValueType<NumberType>(
+  arithmetic: Arithmetic<NumberType>,
+): {
+  lumens: FluxUnit<NumberType>;
+} {
   const { candelas } = intensityWithValueType(arithmetic);
   const { steradians } = solidAngleWithValueType(arithmetic);
 
-  class WithValueType {
-    private constructor() {}
+  /** The lumen, symbol `lm`, is the SI unit for luminous flux. */
+  const lumens: Unit<NumberType, dimension.Flux> = candelas
+    .times(steradians)
+    .withSymbol("lm");
 
-    /** The lumen, symbol `lm`, is the SI unit for luminous flux. */
-    static lumens: Unit<NumberType, dimension.Flux> = candelas
-      .times(steradians)
-      .withSymbol("lm");
-  }
-
-  return WithValueType;
+  return { lumens };
 }
 
-export const { lumens } = withValueType(NativeArithmetic);
+const _units: ReturnType<typeof withValueType<number>> = withValueType(
+  NativeArithmetic,
+);
+
+/** The lumen, symbol `lm`, is the SI unit for luminous flux. */
+export const lumens = _units.lumens;

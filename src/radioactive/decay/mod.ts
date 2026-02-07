@@ -9,19 +9,32 @@ export type Radioactivity<NumberType = number> = Quantity<
   dimension.Radioactivity
 >;
 
-export function withValueType<NumberType>(arithmetic: Arithmetic<NumberType>) {
+/** A unit of radioactivity. */
+type RadioactivityUnit<T> = Unit<T, dimension.Radioactivity>;
+
+/**
+ * Creates radioactivity units with a custom arithmetic type.
+ * @param arithmetic The arithmetic implementation to use.
+ * @returns An object with radioactivity unit definitions.
+ */
+export function withValueType<NumberType>(
+  arithmetic: Arithmetic<NumberType>,
+): {
+  becquerels: RadioactivityUnit<NumberType>;
+} {
   const { seconds } = timeWithValueType(arithmetic);
 
-  class WithValueType {
-    private constructor() {}
+  /** The becquerel, symbol `Bq`, is the SI unit for radioactivity. */
+  const becquerels: Unit<NumberType, dimension.Radioactivity> = seconds
+    .reciprocal()
+    .withSymbol("Bq");
 
-    /** The becquerel, symbol `Bq`, is the SI unit for radioactivity. */
-    static becquerels: Unit<NumberType, dimension.Radioactivity> = seconds
-      .reciprocal()
-      .withSymbol("Bq");
-  }
-
-  return WithValueType;
+  return { becquerels };
 }
 
-export const { becquerels } = withValueType(NativeArithmetic);
+const _units: ReturnType<typeof withValueType<number>> = withValueType(
+  NativeArithmetic,
+);
+
+/** The becquerel, symbol `Bq`, is the SI unit for radioactivity. */
+export const becquerels = _units.becquerels;

@@ -11,22 +11,35 @@ export type Pressure<NumberType = number> = Quantity<
   dimension.Pressure
 >;
 
-export function withValueType<NumberType>(arithmetic: Arithmetic<NumberType>) {
+/** A unit of pressure. */
+type PressureUnit<T> = Unit<T, dimension.Pressure>;
+
+/**
+ * Creates pressure units with a custom arithmetic type.
+ * @param arithmetic The arithmetic implementation to use.
+ * @returns An object with pressure unit definitions.
+ */
+export function withValueType<NumberType>(
+  arithmetic: Arithmetic<NumberType>,
+): {
+  pascals: PressureUnit<NumberType>;
+} {
   const { meters } = lengthWithValueType(arithmetic);
   const { kilograms } = massWithValueType(arithmetic);
   const { seconds } = timeWithValueType(arithmetic);
 
-  class WithValueType {
-    private constructor() {}
+  /** The pascal, symbol `Pa`, is the SI unit for pressure. */
+  const pascals: Unit<NumberType, dimension.Pressure> = kilograms
+    .per(meters)
+    .per(seconds.squared())
+    .withSymbol("Pa");
 
-    /** The pascal, symbol `Pa`, is the SI unit for force. */
-    static pascals: Unit<NumberType, dimension.Pressure> = kilograms
-      .per(meters)
-      .per(seconds.squared())
-      .withSymbol("Pa");
-  }
-
-  return WithValueType;
+  return { pascals };
 }
 
-export const { pascals } = withValueType(NativeArithmetic);
+const _units: ReturnType<typeof withValueType<number>> = withValueType(
+  NativeArithmetic,
+);
+
+/** The pascal, symbol `Pa`, is the SI unit for pressure. */
+export const pascals = _units.pascals;

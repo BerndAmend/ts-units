@@ -12,24 +12,37 @@ export type Resistance<NumberType = number> = Quantity<
   dimension.Resistance
 >;
 
-export function withValueType<NumberType>(arithmetic: Arithmetic<NumberType>) {
+/** A unit of electrical resistance. */
+type ResistanceUnit<T> = Unit<T, dimension.Resistance>;
+
+/**
+ * Creates electrical resistance units with a custom arithmetic type.
+ * @param arithmetic The arithmetic implementation to use.
+ * @returns An object with electrical resistance unit definitions.
+ */
+export function withValueType<NumberType>(
+  arithmetic: Arithmetic<NumberType>,
+): {
+  ohms: ResistanceUnit<NumberType>;
+} {
   const { amperes } = currentWithValueType(arithmetic);
   const { meters } = lengthWithValueType(arithmetic);
   const { kilograms } = massWithValueType(arithmetic);
   const { seconds } = timeWithValueType(arithmetic);
 
-  class WithValueType {
-    private constructor() {}
+  /** The ohm, symbol `Ω`, is the SI unit for electrical resistance. */
+  const ohms: Unit<NumberType, dimension.Resistance> = kilograms
+    .times(meters.squared())
+    .per(seconds.cubed())
+    .per(amperes.squared())
+    .withSymbol("Ω");
 
-    /** The ohm, symbol `Ω`, is the SI unit for electrical resistance. */
-    static ohms: Unit<NumberType, dimension.Resistance> = kilograms
-      .times(meters.squared())
-      .per(seconds.cubed())
-      .per(amperes.squared())
-      .withSymbol("Ω");
-  }
-
-  return WithValueType;
+  return { ohms };
 }
 
-export const { ohms } = withValueType(NativeArithmetic);
+const _units: ReturnType<typeof withValueType<number>> = withValueType(
+  NativeArithmetic,
+);
+
+/** The ohm, symbol `Ω`, is the SI unit for electrical resistance. */
+export const ohms = _units.ohms;

@@ -11,22 +11,35 @@ export type Energy<NumberType = number> = Quantity<
   dimension.Energy
 >;
 
-export function withValueType<NumberType>(arithmetic: Arithmetic<NumberType>) {
+/** A unit of energy. */
+type EnergyUnit<T> = Unit<T, dimension.Energy>;
+
+/**
+ * Creates energy units with a custom arithmetic type.
+ * @param arithmetic The arithmetic implementation to use.
+ * @returns An object with energy unit definitions.
+ */
+export function withValueType<NumberType>(
+  arithmetic: Arithmetic<NumberType>,
+): {
+  joules: EnergyUnit<NumberType>;
+} {
   const { meters } = lengthWithValueType(arithmetic);
   const { kilograms } = massWithValueType(arithmetic);
   const { seconds } = timeWithValueType(arithmetic);
 
-  class WithValueType {
-    private constructor() {}
+  /** The joule, symbol `J`, is the SI unit for energy. */
+  const joules: Unit<NumberType, dimension.Energy> = kilograms
+    .times(meters.squared())
+    .per(seconds.squared())
+    .withSymbol("J");
 
-    /** The joule, symbol `J`, is the SI unit for energy. */
-    static joules: Unit<NumberType, dimension.Energy> = kilograms
-      .times(meters.squared())
-      .per(seconds.squared())
-      .withSymbol("J");
-  }
-
-  return WithValueType;
+  return { joules };
 }
 
-export const { joules } = withValueType(NativeArithmetic);
+const _units: ReturnType<typeof withValueType<number>> = withValueType(
+  NativeArithmetic,
+);
+
+/** The joule, symbol `J`, is the SI unit for energy. */
+export const joules = _units.joules;

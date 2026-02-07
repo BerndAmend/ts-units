@@ -12,25 +12,38 @@ export type Conductance<NumberType = number> = Quantity<
   dimension.Conductance
 >;
 
-export function withValueType<NumberType>(arithmetic: Arithmetic<NumberType>) {
+/** A unit of electrical conductance. */
+type ConductanceUnit<T> = Unit<T, dimension.Conductance>;
+
+/**
+ * Creates electrical conductance units with a custom arithmetic type.
+ * @param arithmetic The arithmetic implementation to use.
+ * @returns An object with electrical conductance unit definitions.
+ */
+export function withValueType<NumberType>(
+  arithmetic: Arithmetic<NumberType>,
+): {
+  siemens: ConductanceUnit<NumberType>;
+} {
   const { amperes } = currentWithValueType(arithmetic);
   const { kilograms } = massWithValueType(arithmetic);
   const { meters } = lengthWithValueType(arithmetic);
   const { seconds } = timeWithValueType(arithmetic);
 
-  class WithValueType {
-    private constructor() {}
+  /** The siemens, symbol `S`, is the SI unit for electrical conductance. */
+  const siemens: Unit<NumberType, dimension.Conductance> = seconds
+    .cubed()
+    .times(amperes.squared())
+    .per(kilograms)
+    .per(meters.squared())
+    .withSymbol("S");
 
-    /** The siemens, symbol `S`, is the SI unit for electrical conductance. */
-    static siemens: Unit<NumberType, dimension.Conductance> = seconds
-      .cubed()
-      .times(amperes.squared())
-      .per(kilograms)
-      .per(meters.squared())
-      .withSymbol("S");
-  }
-
-  return WithValueType;
+  return { siemens };
 }
 
-export const { siemens } = withValueType(NativeArithmetic);
+const _units: ReturnType<typeof withValueType<number>> = withValueType(
+  NativeArithmetic,
+);
+
+/** The siemens, symbol `S`, is the SI unit for electrical conductance. */
+export const siemens = _units.siemens;
