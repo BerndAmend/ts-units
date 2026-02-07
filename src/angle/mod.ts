@@ -46,7 +46,7 @@ export function withValueType<NumberType>(
   const radians = makeUnit("rad", dimension.Angle);
 
   /** One degree equals π/180 radians. */
-  const degrees = radians.times(Math.PI).per(180).withSymbol("º");
+  const degrees = radians.times(Math.PI).per(180).withSymbol("°");
 
   /** One turn equals 2π radians. */
   const turns = radians.times(2).times(Math.PI).withSymbol("τ");
