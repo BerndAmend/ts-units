@@ -308,13 +308,13 @@ export function withValueType<T>(
 
   // Length
   const meters = makeUnit("m", dim.Length);
-  const kilometers = meters.times(1000).withSymbol("km");
-  const centimeters = meters.times(0.01).withSymbol("cm");
-  const millimeters = meters.times(0.001).withSymbol("mm");
-  const micrometers = meters.times(1e-6).withSymbol("μm");
-  const nanometers = meters.times(1e-9).withSymbol("nm");
-  const picometers = meters.times(1e-12).withSymbol("pm");
-  const femtometers = meters.times(1e-15).withSymbol("fm");
+  const kilometers = meters.withSiPrefix("k");
+  const centimeters = meters.withSiPrefix("c");
+  const millimeters = meters.withSiPrefix("m");
+  const micrometers = meters.withSiPrefix("μ");
+  const nanometers = meters.withSiPrefix("n");
+  const picometers = meters.withSiPrefix("p");
+  const femtometers = meters.withSiPrefix("f");
   const angstroms = meters.times(1e-10).withSymbol("Å");
   const inches = meters.times(0.0254).withSymbol("in");
   const feet = inches.times(12).withSymbol("ft");
@@ -329,19 +329,19 @@ export function withValueType<T>(
   const fermi = femtometers;
 
   // Mass
-  const kilograms = makeUnit("kg", dim.Mass);
-  const grams = kilograms.times(0.001).withSymbol("g");
-  const milligrams = kilograms.times(1e-6).withSymbol("mg");
-  const micrograms = kilograms.times(1e-9).withSymbol("μg");
+  const grams = makeUnit("g", dim.Mass);
+  const kilograms = grams.withSiPrefix("k");
+  const milligrams = grams.withSiPrefix("m");
+  const micrograms = grams.withSiPrefix("μ");
   const tonnes = kilograms.times(1000).withSymbol("t");
-  const pounds = kilograms.times(0.45359237).withSymbol("lb");
+  const pounds = grams.times(453.59237).withSymbol("lb");
   const ounces = pounds.per(16).withSymbol("oz");
 
   // Time
   const seconds = makeUnit("s", dim.Time);
-  const milliseconds = seconds.times(0.001).withSymbol("ms");
-  const microseconds = seconds.times(1e-6).withSymbol("μs");
-  const nanoseconds = seconds.times(1e-9).withSymbol("ns");
+  const milliseconds = seconds.withSiPrefix("m");
+  const microseconds = seconds.withSiPrefix("μ");
+  const nanoseconds = seconds.withSiPrefix("n");
   const minutes = seconds.times(60).withSymbol("min");
   const hours = minutes.times(60).withSymbol("h");
   const s = seconds;
@@ -398,7 +398,7 @@ export function withValueType<T>(
   // Volume
   const cubicMeters = meters.cubed().withSymbol("m³") as Unit<T, dim.Volume>;
   const liters = cubicMeters.times(0.001).withSymbol("L");
-  const milliliters = liters.times(0.001).withSymbol("mL");
+  const milliliters = liters.withSiPrefix("m");
   const gallons = liters.times(3.785411784).withSymbol("gal");
   const cups = milliliters.times(236.588).withSymbol("cup");
   const fluidOunces = milliliters.times(29.5735).withSymbol("fl oz");
@@ -448,9 +448,9 @@ export function withValueType<T>(
     .times(meters.squared())
     .per(seconds.squared())
     .withSymbol("J") as Unit<T, dim.Energy>;
-  const kilojoules = joules.times(1000).withSymbol("kJ");
+  const kilojoules = joules.withSiPrefix("k");
   const calories = joules.times(4.184).withSymbol("cal");
-  const kilocalories = calories.times(1000).withSymbol("kcal");
+  const kilocalories = calories.withSiPrefix("k");
   const kilowattHours = joules.times(3.6e6).withSymbol("kWh");
   const electronvolts = joules.times(1.602176634e-19).withSymbol("eV");
 
@@ -463,7 +463,7 @@ export function withValueType<T>(
     .per(seconds.squared())
     .withSymbol("Pa") as Unit<T, dim.Pressure>;
   const bar = pascals.times(100000).withSymbol("bar");
-  const millibar = pascals.times(100).withSymbol("mbar");
+  const millibar = bar.withSiPrefix("m");
   const psi = pascals.times(6894.757293168).withSymbol("psi");
   const atmospheres = pascals.times(101325).withSymbol("atm");
 
@@ -487,9 +487,9 @@ export function withValueType<T>(
     T,
     dim.Capacitance
   >;
-  const microfarads = farads.times(1e-6).withSymbol("μF");
-  const nanofarads = farads.times(1e-9).withSymbol("nF");
-  const picofarads = farads.times(1e-12).withSymbol("pF");
+  const microfarads = farads.withSiPrefix("μ");
+  const nanofarads = farads.withSiPrefix("n");
+  const picofarads = farads.withSiPrefix("p");
 
   // Inductance
   const henries = volts
