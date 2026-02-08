@@ -1,10 +1,10 @@
 import {
   makeUnit,
   makeUnitFactory,
+  type MathFunctions,
   type Quantity,
   type Unit,
-} from "../src/unit.ts";
-import type { Arithmetic } from "../src/arithmetic.ts";
+} from "ts-units";
 import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 
@@ -29,34 +29,30 @@ const Frequency: Frequency = { time: -1 };
 type Speed = { length: 1; time: -1 };
 const _Speed: Speed = { length: 1, time: -1 };
 
-export const StringArithmetic: Arithmetic<string> = {
-  fromNative: function (value: number): string {
-    return value.toString();
-  },
-  toNative: function (value: string): number {
-    return Number(value);
-  },
-  add: function (left: string, right: string): string {
-    return (Number(left) + Number(right)).toString();
-  },
-  sub: function (left: string, right: string): string {
-    return (Number(left) - Number(right)).toString();
-  },
-  mul: function (left: string, right: string): string {
-    return (Number(left) * Number(right)).toString();
-  },
-  div: function (left: string, right: string): string {
-    return (Number(left) / Number(right)).toString();
-  },
-  pow: function (base: string, exponent: string): string {
-    return (Number(base) ** Number(exponent)).toString();
-  },
-  abs: function (value: string): string {
-    return Math.abs(Number(value)).toString();
-  },
-  compare: function (left: string, right: string): number {
-    return Number(left) - Number(right);
-  },
+const StringArithmetic: MathFunctions<string> = {
+  fromNative: (value: number): string => value.toString(),
+  toNative: (value: string): number => Number(value),
+  add: (left: string, right: string): string =>
+    (Number(left) + Number(right)).toString(),
+  sub: (left: string, right: string): string =>
+    (Number(left) - Number(right)).toString(),
+  mul: (left: string, right: string): string =>
+    (Number(left) * Number(right)).toString(),
+  div: (left: string, right: string): string =>
+    (Number(left) / Number(right)).toString(),
+  pow: (base: string, exponent: string): string =>
+    (Number(base) ** Number(exponent)).toString(),
+  abs: (value: string): string => Math.abs(Number(value)).toString(),
+  compare: (left: string, right: string): number =>
+    Number(left) - Number(right),
+  acos: (value: string): string => Math.acos(Number(value)).toString(),
+  asin: (value: string): string => Math.asin(Number(value)).toString(),
+  atan: (value: string): string => Math.atan(Number(value)).toString(),
+  atan2: (left: string, right: string): string =>
+    Math.atan2(Number(left), Number(right)).toString(),
+  cos: (value: string): string => Math.cos(Number(value)).toString(),
+  sin: (value: string): string => Math.sin(Number(value)).toString(),
+  tan: (value: string): string => Math.tan(Number(value)).toString(),
 };
 
 describe("unit", () => {

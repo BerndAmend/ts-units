@@ -5,7 +5,7 @@ import {
   Reciprocal,
   Squared,
   Times,
-} from "../src/dimension.ts";
+} from "ts-units";
 import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 

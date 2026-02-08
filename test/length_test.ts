@@ -13,7 +13,7 @@ import {
   nanometers,
   nauticalMiles,
   yards,
-} from "../src/length/mod.ts";
+} from "ts-units";
 import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 

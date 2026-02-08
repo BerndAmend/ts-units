@@ -1,4 +1,4 @@
-import { makeUnit } from "../src/unit.ts";
+import { makeUnit } from "ts-units";
 
 Deno.bench("makeUnit", () => {
   makeUnit("m", { length: 1 });

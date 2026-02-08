@@ -1,9 +1,9 @@
 import {
   type Acceleration,
+  meters,
   metersPerSecondSquared,
-} from "../src/acceleration/mod.ts";
-import { meters } from "../src/length/mod.ts";
-import { seconds } from "../src/time/mod.ts";
+  seconds,
+} from "ts-units";
 import { assertEquals } from "@std/assert";
 
 Deno.test("acceleration tests", () => {

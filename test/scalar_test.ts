@@ -1,5 +1,4 @@
-import { percent, permille, permyriad, scalar } from "../src/scalar/mod.ts";
-import { centimeters } from "../src/length/mod.ts";
+import { centimeters, percent, permille, permyriad, scalar } from "ts-units";
 import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 

@@ -1,6 +1,5 @@
 import { assertEquals, assertExists } from "@std/assert";
-import { allUnits, meters, seconds, sin } from "../src/mod.ts";
-import { parse } from "../src/parse.ts";
+import { allUnits, meters, parse, seconds, sin } from "ts-units";
 
 Deno.test("allUnits array contains expected units", () => {
   assertExists(allUnits);
@@ -31,11 +30,11 @@ Deno.test("Exports work correctly", () => {
 });
 
 Deno.test("parse works with allUnits", () => {
-  const q1 = parse("10 m", allUnits);
+  const q1 = parse("10 m");
   assertEquals(q1.amount, 10);
   assertEquals(q1.unit.symbol, "m");
 
-  const q2 = parse("5.5 km", allUnits);
+  const q2 = parse("5.5 km");
   assertEquals(q2.amount, 5.5);
   assertEquals(q2.unit.symbol, "km");
   // Let's check length/mod.ts:
