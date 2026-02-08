@@ -1,4 +1,4 @@
-import { celsius, fahrenheit, kelvin } from "../src/temperature/mod.ts";
+import { celsius, fahrenheit, kelvin } from "ts-units";
 import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 

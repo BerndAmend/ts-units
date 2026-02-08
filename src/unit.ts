@@ -1,4 +1,3 @@
-import { type Arithmetic, NativeArithmetic } from "./arithmetic.ts";
 import {
   Cubed,
   type Dimensions,
@@ -8,7 +7,68 @@ import {
   Reciprocal,
   Squared,
   Times,
-} from "./dimension.ts";
+} from "./dimensions.ts";
+
+/**
+ * The library is using by default the native number of JavaScript.
+ * As we know, it is not precise, and could lead to a calculation error.
+ * The most infamous example being (0.1 + 0.2).
+ *
+ * By implementing this interface, you will be able to write your own
+ * implementation of the math functions.
+ *
+ * For instance, you could implement it using [decimal.js]{@link https://github.com/MikeMcl/decimal.js}.
+ */
+export interface MathFunctions<T> {
+  // Arithmetic
+  fromNative(value: number): T;
+  toNative(value: T): number;
+  add(left: T, right: T): T;
+  sub(left: T, right: T): T;
+  mul(left: T, right: T): T;
+  div(left: T, right: T): T;
+  pow(base: T, exponent: T): T;
+  abs(value: T): T;
+  // 1 => left > right
+  // 0 => left === right
+  // -1 => left < right
+  compare(left: T, right: T): number;
+
+  // Geometric
+  sin(value: T): T;
+  cos(value: T): T;
+  tan(value: T): T;
+  asin(value: T): T;
+  acos(value: T): T;
+  atan(value: T): T;
+  atan2(left: T, right: T): T;
+}
+
+/**
+ * Default implementation of the MathFunctions interface
+ * based on the native number of JavaScript.
+ */
+export const NativeMath: MathFunctions<number> = {
+  // Arithmetic
+  fromNative: (value: number): number => value,
+  toNative: (value: number): number => value,
+  add: (left: number, right: number): number => left + right,
+  sub: (left: number, right: number): number => left - right,
+  mul: (left: number, right: number): number => left * right,
+  div: (left: number, right: number): number => left / right,
+  pow: (base: number, exponent: number): number => base ** exponent,
+  abs: Math.abs,
+  compare: (left: number, right: number): number => left - right,
+
+  // Geometric
+  sin: Math.sin,
+  cos: Math.cos,
+  tan: Math.tan,
+  asin: Math.asin,
+  acos: Math.acos,
+  atan: Math.atan,
+  atan2: Math.atan2,
+};
 
 /**
  * A measurement unit of a particular dimension. For example, the meter, the
@@ -87,7 +147,7 @@ export interface Unit<NumberType, D extends Dimensions> {
   readonly offset: NumberType;
 
   /** Generate a new amount of this unit. */
-  (amount: number): Quantity<NumberType, D>;
+  (amount: number | NumberType): Quantity<NumberType, D>;
 
   /**
    * Returns the reciprocal unit to this one.
@@ -163,7 +223,7 @@ export interface Unit<NumberType, D extends Dimensions> {
    *
    * Example:
    * ```
-   * const celsius = kelvin.withOffset(-273.15).withSymbol('ºC');
+   * const celsius = kelvin.withOffset(273.15).withSymbol('ºC');
    * ```
    */
   withOffset(offset: number): Unit<NumberType, D>;
@@ -421,7 +481,7 @@ const SI_PREFIX = {
 const DEFAULT_LOCALE = "en-us";
 
 export const makeUnitFactory = <NumberType>(
-  arithmetic: Arithmetic<NumberType>,
+  math: MathFunctions<NumberType>,
 ): {
   makeUnit: <D extends Dimensions>(
     symbol: string,
@@ -434,8 +494,7 @@ export const makeUnitFactory = <NumberType>(
     unit: Unit<NumberType, D>,
   ) => Quantity<NumberType, D>;
 } => {
-  const { fromNative, toNative, add, sub, mul, div, pow, abs, compare } =
-    arithmetic;
+  const { fromNative, toNative, add, sub, mul, div, pow, abs, compare } = math;
 
   /**
    * Creates a new unit.
@@ -457,9 +516,11 @@ export const makeUnitFactory = <NumberType>(
   ): Unit<NumberType, D> {
     // Return a callable object that constructs a quantity of the given unit.
     // See class comment for more details.
-    function makeQuantity(amount: number): Quantity<NumberType, D> {
+    function makeQuantity(
+      amount: number | NumberType,
+    ): Quantity<NumberType, D> {
       return new QuantityImpl<D>(
-        fromNative(amount),
+        typeof amount === "number" ? fromNative(amount) : amount,
         makeQuantity as Unit<NumberType, D>,
       );
     }
@@ -860,6 +921,146 @@ const unitFactory: {
     amount: number,
     unit: Unit<number, D>,
   ) => Quantity<number, D>;
-} = makeUnitFactory(NativeArithmetic);
+} = makeUnitFactory(NativeMath);
 export const makeUnit = unitFactory.makeUnit;
 export const makeQuantity = unitFactory.makeQuantity;
+
+/**
+ * Parses a string into a quantity.
+ * @param input The string to parse.
+ * @param units A list or object of allowed units.
+ * @returns The parsed quantity.
+ * @throws Error if the unit is unknown or the format is invalid.
+ */
+export function parse(
+  input: string,
+  units: Unit<number, Dimensions>[],
+): Quantity<number, Dimensions> {
+  const match = input.trim().match(/^([\d.,]+)\s*(.*)$/);
+
+  if (!match || !match[1]) {
+    throw new Error(`Invalid format: "${input}"`);
+  }
+
+  const valueStr = match[1].replace(/,/g, "."); // Simple handling for decimal comma
+  const unitStr = (match[2] || "").trim();
+  const value = parseFloat(valueStr); // valueStr no longer has spaces
+
+  if (isNaN(value)) {
+    throw new Error(`Invalid number: "${match[1]}"`);
+  }
+
+  if (!unitStr) {
+    throw new Error(`Missing unit in: "${input}"`);
+  }
+
+  // Helper to parse a single unit part (numerator or denominator)
+  const parsePart = (part: string): Unit<number, Dimensions> | null => {
+    const tokens = part.split(/[\s*·]+/); // Split by space, *, or middle dot
+    let partUnit: Unit<number, Dimensions> | null = null;
+
+    for (const token of tokens) {
+      if (!token) continue;
+      if (token === "1") continue; // multiplicative identity
+
+      const powerMatch = token.match(/^(.+?)(?:\^(-?\d+)|([²³]))?$/);
+      if (!powerMatch) {
+        throw new Error(`Invalid unit token: "${token}"`);
+      }
+
+      const baseSymbol = powerMatch[1]!;
+      let baseUnit = units.find((u) => u.symbol === baseSymbol);
+
+      // Try SI prefixes
+      if (!baseUnit) {
+        for (const [prefix, scale] of Object.entries(SI_PREFIX)) {
+          if (baseSymbol.startsWith(prefix)) {
+            const potentialBaseSymbol = baseSymbol.substring(prefix.length);
+            const potentialBaseUnit = units.find((u) =>
+              u.symbol === potentialBaseSymbol
+            );
+            if (potentialBaseUnit) {
+              // We need to cast because times returns a specific generic type but we need generic Unit
+              baseUnit = potentialBaseUnit.times(scale) as unknown as Unit<
+                number,
+                Dimensions
+              >;
+              break;
+            }
+          }
+        }
+      }
+
+      if (!baseUnit) {
+        throw new Error(`Unknown unit: "${baseSymbol}"`);
+      }
+
+      // Determine power
+      let power = 1;
+      if (powerMatch[2]) {
+        power = parseInt(powerMatch[2], 10);
+      } else if (powerMatch[3] === "²") {
+        power = 2;
+      } else if (powerMatch[3] === "³") {
+        power = 3;
+      }
+
+      // Apply power
+      let tokenUnit = baseUnit;
+      if (power !== 1) {
+        const absPower = Math.abs(power);
+        if (absPower === 0) throw new Error("Power cannot be zero");
+
+        let acc = baseUnit;
+        for (let i = 1; i < absPower; i++) {
+          // deno-lint-ignore no-explicit-any
+          acc = acc.times(baseUnit as any) as any;
+        }
+        tokenUnit = acc;
+
+        if (power < 0) {
+          tokenUnit = tokenUnit.reciprocal();
+        }
+      }
+
+      if (partUnit === null) {
+        partUnit = tokenUnit;
+      } else {
+        // deno-lint-ignore no-explicit-any
+        partUnit = partUnit.times(tokenUnit as any) as any;
+      }
+    }
+    return partUnit;
+  };
+
+  const parts = unitStr.split("/");
+  if (parts.length > 2) {
+    throw new Error(`Invalid unit format (multiple slashes): "${unitStr}"`);
+  }
+
+  const numUnit = parsePart(parts[0]!);
+  const denUnit = parts[1] ? parsePart(parts[1]) : null;
+
+  let resultUnit: Unit<number, Dimensions> | null = null;
+
+  if (numUnit && !denUnit) {
+    resultUnit = numUnit;
+  } else if (!numUnit && denUnit) {
+    resultUnit = denUnit.reciprocal();
+  } else if (numUnit && denUnit) {
+    // deno-lint-ignore no-explicit-any
+    resultUnit = numUnit.per(denUnit as any) as any;
+  } else if (
+    !numUnit && !denUnit && parts.length === 2 && parts[0]!.trim() === "1"
+  ) {
+    // Case like "1/" which is invalid or incomplete, but if "1/s", numUnit is null (filtered "1").
+    // handled by !numUnit && denUnit case.
+    // pass
+  }
+
+  if (!resultUnit) {
+    throw new Error(`No valid unit found in "${unitStr}"`);
+  }
+
+  return resultUnit(value);
+}

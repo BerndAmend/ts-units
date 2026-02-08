@@ -5,14 +5,14 @@ import {
   atan2,
   cos,
   degrees,
+  type Dimensions,
   gradians,
+  type Quantity,
   radians,
   sin,
   tan,
   turns,
-} from "../src/angle/mod.ts";
-import type { Dimensions } from "../src/dimension.ts";
-import type { Quantity } from "../src/unit.ts";
+} from "ts-units";
 import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 

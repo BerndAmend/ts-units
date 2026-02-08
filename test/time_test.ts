@@ -1,4 +1,4 @@
-import { hours, minutes, msec, nanoseconds, s, usec } from "../src/time/mod.ts";
+import { hours, minutes, msec, nanoseconds, s, usec } from "ts-units";
 import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 

@@ -46,7 +46,7 @@ const speed = length.per(seconds(2));
 Simply declare quantities using the built-in units:
 
 ```ts
-import { Length, meters } from "jsr:@bernd/ts-units/length";
+import { Length, meters } from "jsr:@bernd/ts-units";
 const length: Length = meters(5);
 ```
 
@@ -85,8 +85,8 @@ You can parse strings back into quantities using `parse`. You need to provide a
 list or object of allowed units to ensure safety.
 
 ```ts
-import { parse } from "@bernd/ts-units/parse";
-import { kilometers, meters } from "@bernd/ts-units/length";
+import { parse } from "@bernd/ts-units";
+import { kilometers, meters } from "@bernd/ts-units";
 
 const q1 = parse("10 m", [meters, kilometers]);
 const q2 = parse("5.5 km", [meters, kilometers]);
@@ -177,7 +177,7 @@ Here’s a reference of all units that we currently have built in to the library
 ### Planar Angles
 
 ```ts
-import { Angle, degrees, sin } from "@bernd/ts-units/angle";
+import { Angle, degrees, sin } from "@bernd/ts-units";
 const angle: Angle = degrees(30);
 const s = sin(angle);
 ```
@@ -191,7 +191,7 @@ sin, cos, tan, asin, acos, atan, atan2
 ### Solid Angles
 
 ```ts
-import { SolidAngle, steradians } from "@bernd/ts-units/angle/solid";
+import { SolidAngle, steradians } from "@bernd/ts-units";
 const angle: SolidAngle = steradians(1);
 ```
 
@@ -201,7 +201,7 @@ steradians, squareDegrees
 ### Area
 
 ```ts
-import { Area, squareMeters } from "@bernd/ts-units/area";
+import { Area, squareMeters } from "@bernd/ts-units";
 const area: Area = squareMeters(15);
 ```
 
@@ -211,7 +211,7 @@ squareMeters
 ### Electrical Capacitance
 
 ```ts
-import { Capacitance, microfarads } from "@bernd/ts-units/electric/capacitance";
+import { Capacitance, microfarads } from "@bernd/ts-units";
 const capacitance: Capacitance = microfarads(4700);
 ```
 
@@ -221,7 +221,7 @@ farads, microfarads, nanofarads, picofarads
 ### Electric Charge
 
 ```ts
-import { Charge, coulombs } from "@bernd/ts-units/electric/charge";
+import { Charge, coulombs } from "@bernd/ts-units";
 const charge: Charge = coulombs(5000);
 ```
 
@@ -231,7 +231,7 @@ coulombs
 ### Electrical Conductance
 
 ```ts
-import { Conductance, siemens } from "@bernd/ts-units/electric/conductance";
+import { Conductance, siemens } from "@bernd/ts-units";
 const conductance: Conductance = siemens(0.2);
 ```
 
@@ -241,7 +241,7 @@ siemens
 ### Electrical Current
 
 ```ts
-import { amperes, Current } from "@bernd/ts-units/electric/current";
+import { amperes, Current } from "@bernd/ts-units";
 const current: Current = amperes(10);
 ```
 
@@ -251,7 +251,7 @@ amperes
 ### Electrical Inductance
 
 ```ts
-import { henries, Inductance } from "@bernd/ts-units/electric/inductance";
+import { henries, Inductance } from "@bernd/ts-units";
 const inductance: Inductance = henries(1);
 ```
 
@@ -261,7 +261,7 @@ henries
 ### Electrical Resistance
 
 ```ts
-import { ohms, Resistance } from "@bernd/ts-units/electric/resistance";
+import { ohms, Resistance } from "@bernd/ts-units";
 const resistance: Resistance = ohms(560);
 ```
 
@@ -271,7 +271,7 @@ ohms
 ### Electric Voltage
 
 ```ts
-import { Voltage, volts } from "@bernd/ts-units/electric/voltage";
+import { Voltage, volts } from "@bernd/ts-units";
 const voltage: Voltage = volts(220);
 ```
 
@@ -281,7 +281,7 @@ volts
 ### Energy
 
 ```ts
-import { Energy, joules } from "@bernd/ts-units/energy";
+import { Energy, joules } from "@bernd/ts-units";
 const energy: Energy = joules(4.1868);
 ```
 
@@ -291,7 +291,7 @@ joules
 ### Force
 
 ```ts
-import { Force, newtons } from "@bernd/ts-units/force";
+import { Force, newtons } from "@bernd/ts-units";
 const force: Force = newtons(608);
 ```
 
@@ -301,7 +301,7 @@ newtons
 ### Frequency
 
 ```ts
-import { Frequency, hertz } from "@bernd/ts-units/frequency";
+import { Frequency, hertz } from "@bernd/ts-units";
 const frequency: Frequency = hertz(608);
 ```
 
@@ -311,7 +311,7 @@ hertz
 ### Length
 
 ```ts
-import { Length, meters } from "@bernd/ts-units/length";
+import { Length, meters } from "@bernd/ts-units";
 const length: Length = meters(5);
 ```
 
@@ -331,7 +331,7 @@ astronomicalUnits
 ### Luminous Flux
 
 ```ts
-import { Flux, lumes } from "@bernd/ts-units/luminous/flux";
+import { Flux, lumes } from "@bernd/ts-units";
 const flux: Flux = lumens(800);
 ```
 
@@ -341,7 +341,7 @@ lumens
 ### Illuminance
 
 ```ts
-import { Illuminance, lux } from "@bernd/ts-units/luminous/illuminance";
+import { Illuminance, lux } from "@bernd/ts-units";
 const illuminance: Illuminance = lux(35000);
 ```
 
@@ -351,7 +351,7 @@ lux
 ### Luminous Intensity
 
 ```ts
-import { candelas, Intensity } from "@bernd/ts-units/luminous/intensity";
+import { candelas, Intensity } from "@bernd/ts-units";
 const intensity: Intensity = candelas(135);
 ```
 
@@ -361,7 +361,7 @@ candelas
 ### Magnetic Flux
 
 ```ts
-import { Flux, webers } from "@bernd/ts-units/magnetic/flux";
+import { Flux, webers } from "@bernd/ts-units";
 const flux: Flux = webers(800);
 ```
 
@@ -371,7 +371,7 @@ webers
 ### Mass
 
 ```ts
-import { kilograms, Mass } from "@bernd/ts-units/mass";
+import { kilograms, Mass } from "@bernd/ts-units";
 const mass: Mass = kilograms(5);
 ```
 
@@ -383,7 +383,7 @@ kilograms, grams
 Technically not a physical dimension but still very useful.
 
 ```ts
-import { percent, Scalar } from "@bernd/ts-units/scalar";
+import { percent, Scalar } from "@bernd/ts-units";
 const scalar: Scalar = percent(20);
 ```
 
@@ -393,7 +393,7 @@ percent, permille, permyriad
 ### Speed
 
 ```ts
-import { metersPerSecond, Speed } from "@bernd/ts-units/speed";
+import { metersPerSecond, Speed } from "@bernd/ts-units";
 const speed: Speed = metersPerSecond(343);
 ```
 
@@ -403,7 +403,7 @@ metersPerSecond, kilometersPerHour, milesPerHour, knots, feetPerSecond
 ### Power
 
 ```ts
-import { Power, watts } from "@bernd/ts-units/power";
+import { Power, watts } from "@bernd/ts-units";
 const power: Power = watts(800);
 ```
 
@@ -413,7 +413,7 @@ watt
 ### Pressure
 
 ```ts
-import { pascals, Pressure } from "@bernd/ts-units/pressure";
+import { pascals, Pressure } from "@bernd/ts-units";
 const pressure: Pressure = pascals(101325);
 ```
 
@@ -423,7 +423,7 @@ pascals
 ### Radioactivity
 
 ```ts
-import { becquerels, Radioactivity } from "@bernd/ts-units/radioactive/decay";
+import { becquerels, Radioactivity } from "@bernd/ts-units";
 const radioactivity: Radioactivity = becquerels(20);
 ```
 
@@ -433,7 +433,7 @@ becquerels
 ### Absorbed and Equivaelnt Doses of Ionizing Radiation
 
 ```ts
-import { Dose, grays, sieverts } from "@bernd/ts-units/radioactive/dose";
+import { Dose, grays, sieverts } from "@bernd/ts-units";
 const absorbed: Dose = grays(20e-6);
 const equivaelnt: Dose = sieverts(1.5e-3);
 ```
@@ -444,7 +444,7 @@ grays, sieverts
 ### Temperature
 
 ```ts
-import { celsius, Temperature } from "@bernd/ts-units/temperature";
+import { celsius, Temperature } from "@bernd/ts-units";
 const temperature: Temperature = celsius(23.1);
 ```
 
@@ -454,7 +454,7 @@ kelvin, celsius, fahrenheit, rankine
 ### Time
 
 ```ts
-import { minutes, Time } from "@bernd/ts-units/time";
+import { minutes, Time } from "@bernd/ts-units";
 const time: Time = minutes(5);
 ```
 
@@ -464,7 +464,7 @@ seconds, milliseconds (msec), microseconds (usec), nanoseconds, minutes, hours
 ### Volume
 
 ```ts
-import { cubicMeters, Volume } from "@bernd/ts-units/volume";
+import { cubicMeters, Volume } from "@bernd/ts-units";
 const volume: Volume = cubicMeters(3);
 ```
 
@@ -530,9 +530,9 @@ We ensure type safety by encoding the dimensions of units and quantities as
 For example, the dimension mentioned above are defined as:
 
 ```ts
-type Length = { length: 1 };
-type Area = { length: 2 };
-type Speed = { length: 1; time: -1 };
+type Length = { length: 1, readonly [Brand]?: unique symbol };
+type Area = { length: 2, readonly [Brand]?: unique symbol  };
+type Speed = { length: 1; time: -1, readonly [Brand]?: unique symbol  };
 ```
 
 To define a new dimension, start by defining a literal type for it. You’ll also
@@ -542,7 +542,7 @@ introduce quantities of money you might write:
 
 ```ts
 // In money/dimension.ts
-export type Money = { money: 1 };
+export type Money = { money: 1, readonly [Brand]?: unique symbol };
 export const Money: Money = { money: 1 };
 ```
 
@@ -586,77 +586,41 @@ representation of numbers. For instance
 [decimal.js](https://github.com/MikeMcl/decimal.js):
 
 ```ts
-import {Arithmetic, Geometric} from "@bernd/ts-units";
-import {Decimal } from 'decimal.js';
-import {withValueType as temperatureWithValueType} from '@bernd/ts-units/temperature';
-import {withValueType as angleWithValueType} from '@bernd/ts-units/angle';
+import { type MathFunctions, withValueType } from "@bernd/ts-units";
+import { Decimal } from "npm:decimal.js";
 
-const DecimalArithmetic: Arithmetic<Decimal> = {
-  fromNative(value: number): Decimal {
-    return new Decimal(value);
-  },
-  toNative(value: Decimal): number {
-    return value.toNumber();
-  }
-  add(left: Decimal, right: Decimal): Decimal {
-    return left.add(right);
-  },
-  sub(left: Decimal, right: Decimal): Decimal {
-    return left.sub(right);
-  },
-  mul(left: Decimal, right: Decimal): Decimal {
-    return left.mul(right);
-  },
-  div(left: Decimal, right: Decimal): Decimal {
-    return left.div(right);
-  },
-  pow(base: Decimal, exponent: Decimal): Decimal {
-    return base.pow(exponent);
-  },
-  abs(value: Decimal): Decimal {
-    return value.abs();
-  },
-  compare(left: Decimal, right: Decimal): number {
-    return left.comparedTo(right);
-  }
+export const DecimalArithmetic: MathFunctions<Decimal> = {
+  // Arithmetic
+  fromNative: (value: number): Decimal => new Decimal(value),
+  toNative: (value: Decimal): number => value.toNumber(),
+  add: (left: Decimal, right: Decimal): Decimal => left.add(right),
+  sub: (left: Decimal, right: Decimal): Decimal => left.sub(right),
+  mul: (left: Decimal, right: Decimal): Decimal => left.mul(right),
+  div: (left: Decimal, right: Decimal): Decimal => left.div(right),
+  pow: (base: Decimal, exponent: Decimal): Decimal => base.pow(exponent),
+  abs: (value: Decimal): Decimal => value.abs(),
+  compare: (left: Decimal, right: Decimal): number => left.comparedTo(right),
+
+  // Geometric
+  sin: (value: Decimal): Decimal => value.sin(),
+  cos: (value: Decimal): Decimal => value.cos(),
+  tan: (value: Decimal): Decimal => value.tan(),
+  asin: (value: Decimal): Decimal => value.asin(),
+  acos: (value: Decimal): Decimal => value.acos(),
+  atan: (value: Decimal): Decimal => value.atan(),
+  atan2: (x: Decimal, y: Decimal) => Decimal.atan2(x, y),
 };
 
-const {celsius} = temperatureWithValueType(DecimalArithmetic);
+const { celsius, radians, sin, cos } = withValueType(DecimalArithmetic);
 
-// Planar Angles needs also an implementation of geometric.
-const DecimalGeometric: Geometric<Decimal> = {
-    sin(value: Decimal): Decimal {
-        return value.sin();
-    },
-    cos(value: Decimal): Decimal {
-        return value.cos();
-    },
-    tan(value: Decimal): Decimal {
-        return value.tan();
-    },
-    asin(value: Decimal): Decimal {
-        return value.asin();
-    },
-    acos(value: Decimal): Decimal {
-        return value.acos();
-    },
-    atan(value: Decimal): Decimal {
-        return value.atan();
-    },
-    atan2(left: Decimal, right: Decimal): Decimal {
-        return Decimal.atan2(left, right);
-    }
-};
-
-const {radians, sin, cos} = angleWithValueType(DecimalArithmetic, DecimalGeometric);
+console.log(celsius(Decimal(0.2)).plus(celsius(0.1)).toLocaleString());
 ```
 
 Finally, if you want to create your units from scratch using your own
 arithmetic, you can use the function `makeUnitFactory`.
 
 ```ts
-import * as dimension from "./dimension";
-import { DecimalArithmetic } from "./arithmetic";
+import * as dimension from "@bernd/ts-units";
 
 const { makeUnit } = makeUnitFactory(DecimalArithmetic);
 
@@ -666,27 +630,3 @@ export const dollars: Unit<Decimal, dimension.Money> = makeUnit(
   dimension.Money,
 );
 ```
-
-## Limitations
-
-### Lack of input flexibility
-
-Currently when declaring quantities you can only use native number as input.
-
-```ts
-import { meters } from "@bernd/ts-units/length";
-// It won't work
-const length = meters("5");
-```
-
-```ts
-import { withValueType } from "@bernd/ts-units/length";
-const { meters } = withValueType(DecimalArithmetic);
-// It won't work
-const length = meters(new Decimal(5));
-```
-
-Moreover, the arithmetic function of `Unit` and `Quantity` also support only
-native number.
-
-It could be improve in future

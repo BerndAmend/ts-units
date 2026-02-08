@@ -1,21 +1,25 @@
-import { metersPerSecond, type Speed } from "../src/speed/mod.ts";
-import { type Length, meters } from "../src/length/mod.ts";
-import type { Time } from "../src/time/mod.ts";
-import { kilograms, type Mass } from "../src/mass/mod.ts";
-import { type Force, newtons } from "../src/force/mod.ts";
-import type { Energy } from "../src/energy/mod.ts";
-import { type Power, watts } from "../src/power/mod.ts";
-import { type Frequency, hertz } from "../src/frequency/mod.ts";
-import {
-  becquerels,
-  type Radioactivity,
-} from "../src/radioactive/decay/mod.ts";
 import {
   type AbsorbedDose,
+  becquerels,
+  type Energy,
   type EquivalentDose,
+  type Force,
+  type Frequency,
   grays,
+  hertz,
+  kilograms,
+  type Length,
+  type Mass,
+  meters,
+  metersPerSecond,
+  newtons,
+  type Power,
+  type Radioactivity,
   sieverts,
-} from "../src/radioactive/dose/mod.ts";
+  type Speed,
+  type Time,
+  watts,
+} from "ts-units";
 import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 

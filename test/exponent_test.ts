@@ -5,7 +5,7 @@ import {
   type Negate,
   type Subtract,
   type Triple,
-} from "../src/exponent.ts";
+} from "ts-units";
 import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 

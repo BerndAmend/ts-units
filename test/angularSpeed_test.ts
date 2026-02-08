@@ -1,10 +1,12 @@
 import {
   type AngularSpeed,
+  degrees,
   degreesPerSecond,
+  hours,
+  radians,
   radiansPerSecond,
-} from "../src/angularSpeed/mod.ts";
-import { degrees, radians } from "../src/angle/mod.ts";
-import { hours, seconds } from "../src/time/mod.ts";
+  seconds,
+} from "ts-units";
 import { expect } from "@std/expect";
 
 Deno.test("angular speed tests", () => {
