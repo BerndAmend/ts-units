@@ -1,22 +1,23 @@
 import { assertEquals, assertExists } from "@std/assert";
 import { allUnits, meters, parse, seconds, sin } from "ts-units";
 
-Deno.test("allUnits array contains expected units", () => {
+Deno.test("allUnits object contains expected units", () => {
   assertExists(allUnits);
-  assertEquals(Array.isArray(allUnits), true);
-  assertEquals(allUnits.length > 0, true);
+  assertEquals(typeof allUnits, "object");
+  assertEquals(Array.isArray(allUnits), false);
+
+  const unitsArray = Object.values(allUnits);
+  assertEquals(unitsArray.length > 0, true);
 
   // Check for presence of some known units
-  const hasMeters = allUnits.some((u) => u.symbol === "m");
+  const hasMeters = unitsArray.some((u) => u.symbol === "m");
   assertEquals(hasMeters, true);
 
-  const hasSeconds = allUnits.some((u) => u.symbol === "s");
+  const hasSeconds = unitsArray.some((u) => u.symbol === "s");
   assertEquals(hasSeconds, true);
 
-  // Check that non-units like 'sin' are NOT in allUnits
-  // 'sin' doesn't have a symbol, so it wouldn't match anyway if we checked properly.
-  // But we can check that everything in allUnits has a symbol.
-  for (const unit of allUnits) {
+  // Check that properties of the object are units
+  for (const unit of unitsArray) {
     assertExists(unit.symbol, "Unit should have a symbol");
     assertExists(unit.dimension, "Unit should have a dimension");
   }
@@ -37,9 +38,4 @@ Deno.test("parse works with allUnits", () => {
   const q2 = parse("5.5 km");
   assertEquals(q2.amount, 5.5);
   assertEquals(q2.unit.symbol, "km");
-  // Let's check length/mod.ts:
-  // const kilometers = meters.withSiPrefix("k");
-  // withSiPrefix adds prefix to symbol.
-  // meters symbol is "m". So "km".
-  // Actually, let's verify exact symbol.
 });

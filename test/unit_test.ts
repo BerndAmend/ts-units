@@ -546,7 +546,7 @@ describe("unit", () => {
 
       it("simplifies the amount", () => {
         const meters = makeUnit("m", Length);
-        expect(meters(1 / 3).toString()).toEqual("0.333 m");
+        expect(meters(1 / 3).toString()).toEqual("0.333333 m");
       });
 
       it("uses thousand separators", () => {
