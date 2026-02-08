@@ -1111,10 +1111,7 @@ export function parse(
             );
             if (potentialBaseUnit) {
               // We need to cast because times returns a specific generic type but we need generic Unit
-              baseUnit = potentialBaseUnit.times(scale) as unknown as Unit<
-                number,
-                Dimensions
-              >;
+              baseUnit = potentialBaseUnit.times(scale);
               break;
             }
           }

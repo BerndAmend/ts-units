@@ -107,6 +107,7 @@ export type EquivalentDose<T = number> = Quantity<T, dim.EquivalentDose>;
 
 /** All units returned by withValueType. */
 export interface AllUnits<T> {
+  [key: string]: Unit<T, dim.Dimensions>;
   // Length
   meters: Unit<T, dim.Length>;
   kilometers: Unit<T, dim.Length>;
@@ -884,9 +885,6 @@ export function parse(
     | Record<string, Unit<number, dim.Dimensions>>
     | AllUnits<number>,
 ): Quantity<number, dim.Dimensions> {
-  const unitsArg = (units || allUnits) as unknown as Record<
-    string,
-    Unit<number, dim.Dimensions>
-  >;
+  const unitsArg = units || allUnits;
   return parseBase(input, unitsArg);
 }
