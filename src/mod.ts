@@ -393,10 +393,10 @@ export function withValueType<T>(
   // ==========================================================================
 
   // Area
-  const squareMeters = meters.squared().withSymbol("m²") as Unit<T, dim.Area>;
+  const squareMeters = meters.squared().brand(dim.Area);
 
   // Volume
-  const cubicMeters = meters.cubed().withSymbol("m³") as Unit<T, dim.Volume>;
+  const cubicMeters = meters.cubed().brand(dim.Volume);
   const liters = cubicMeters.times(0.001).withSymbol("L");
   const milliliters = liters.withSiPrefix("m");
   const gallons = liters.times(3.785411784).withSymbol("gal");
@@ -404,50 +404,37 @@ export function withValueType<T>(
   const fluidOunces = milliliters.times(29.5735).withSymbol("fl oz");
 
   // Speed
-  const metersPerSecond = meters.per(seconds).withSymbol("m/s") as Unit<
-    T,
-    dim.Speed
-  >;
-  const kilometersPerHour = kilometers.per(hours).withSymbol("km/h") as Unit<
-    T,
-    dim.Speed
-  >;
-  const milesPerHour = miles.per(hours).withSymbol("mph") as Unit<T, dim.Speed>;
-  const knots = nauticalMiles.per(hours).withSymbol("kn") as Unit<T, dim.Speed>;
-  const feetPerSecond = feet.per(seconds).withSymbol("fps") as Unit<
-    T,
-    dim.Speed
-  >;
+  const metersPerSecond = meters.per(seconds).brand(dim.Speed);
+  const kilometersPerHour = kilometers.per(hours).brand(dim.Speed);
+  const milesPerHour = miles.per(hours).brand(dim.Speed).withSymbol("mph");
+  const knots = nauticalMiles.per(hours).brand(dim.Speed).withSymbol("kn");
+  const feetPerSecond = feet.per(seconds).brand(dim.Speed).withSymbol("fps");
 
   // Acceleration
-  const metersPerSecondSquared = meters
-    .per(seconds.squared())
-    .withSymbol("m/s²") as Unit<T, dim.Acceleration>;
+  const metersPerSecondSquared = meters.per(seconds.squared()).brand(
+    dim.Acceleration,
+  );
 
   // Angular Speed
-  const radiansPerSecond = radians.per(seconds).withSymbol("rad/s") as Unit<
-    T,
-    dim.AngularSpeed
-  >;
-  const degreesPerSecond = degrees.per(seconds).withSymbol("°/s") as Unit<
-    T,
-    dim.AngularSpeed
-  >;
+  const radiansPerSecond = radians.per(seconds).brand(dim.AngularSpeed);
+  const degreesPerSecond = degrees.per(seconds).brand(dim.AngularSpeed);
 
   // Frequency
-  const hertz = seconds.reciprocal().withSymbol("Hz") as Unit<T, dim.Frequency>;
+  const hertz = seconds.reciprocal().brand(dim.Frequency).withSymbol("Hz");
 
   // Force
   const newtons = kilograms
     .times(meters)
     .per(seconds.squared())
-    .withSymbol("N") as Unit<T, dim.Force>;
+    .brand(dim.Force)
+    .withSymbol("N");
 
   // Energy
   const joules = kilograms
     .times(meters.squared())
     .per(seconds.squared())
-    .withSymbol("J") as Unit<T, dim.Energy>;
+    .brand(dim.Energy)
+    .withSymbol("J");
   const kilojoules = joules.withSiPrefix("k");
   const calories = joules.times(4.184).withSymbol("cal");
   const kilocalories = calories.withSiPrefix("k");
@@ -455,38 +442,33 @@ export function withValueType<T>(
   const electronvolts = joules.times(1.602176634e-19).withSymbol("eV");
 
   // Power
-  const watts = joules.per(seconds).withSymbol("W") as Unit<T, dim.Power>;
+  const watts = joules.per(seconds).brand(dim.Power).withSymbol("W");
 
   // Pressure
   const pascals = kilograms
     .per(meters)
     .per(seconds.squared())
-    .withSymbol("Pa") as Unit<T, dim.Pressure>;
+    .brand(dim.Pressure)
+    .withSymbol("Pa");
   const bar = pascals.times(100000).withSymbol("bar");
   const millibar = bar.withSiPrefix("m");
   const psi = pascals.times(6894.757293168).withSymbol("psi");
   const atmospheres = pascals.times(101325).withSymbol("atm");
 
   // Electric Charge
-  const coulombs = amperes.times(seconds).withSymbol("C") as Unit<
-    T,
-    dim.Charge
-  >;
+  const coulombs = amperes.times(seconds).brand(dim.Charge).withSymbol("C");
 
   // Voltage
-  const volts = watts.per(amperes).withSymbol("V") as Unit<T, dim.Voltage>;
+  const volts = watts.per(amperes).brand(dim.Voltage).withSymbol("V");
 
   // Resistance
-  const ohms = volts.per(amperes).withSymbol("Ω") as Unit<T, dim.Resistance>;
+  const ohms = volts.per(amperes).brand(dim.Resistance).withSymbol("Ω");
 
   // Conductance
-  const siemens = ohms.reciprocal().withSymbol("S") as Unit<T, dim.Conductance>;
+  const siemens = ohms.reciprocal().brand(dim.Conductance).withSymbol("S");
 
   // Capacitance
-  const farads = coulombs.per(volts).withSymbol("F") as Unit<
-    T,
-    dim.Capacitance
-  >;
+  const farads = coulombs.per(volts).brand(dim.Capacitance).withSymbol("F");
   const microfarads = farads.withSiPrefix("μ");
   const nanofarads = farads.withSiPrefix("n");
   const picofarads = farads.withSiPrefix("p");
@@ -495,49 +477,36 @@ export function withValueType<T>(
   const henries = volts
     .times(seconds)
     .per(amperes)
-    .withSymbol("H") as Unit<T, dim.Inductance>;
+    .brand(dim.Inductance)
+    .withSymbol("H");
 
   // Magnetic Flux
-  const webers = volts.times(seconds).withSymbol("Wb") as Unit<
-    T,
-    dim.MagneticFlux
-  >;
+  const webers = volts.times(seconds).brand(dim.MagneticFlux).withSymbol("Wb");
 
   // Magnetic Induction
-  const teslas = webers.per(squareMeters).withSymbol("T") as Unit<
-    T,
-    dim.MagneticInduction
-  >;
+  const teslas = webers.per(squareMeters).brand(dim.MagneticInduction)
+    .withSymbol("T");
 
   // Luminous Flux
-  const lumens = candelas.times(steradians).withSymbol("lm") as Unit<
-    T,
-    dim.LuminousFlux
-  >;
+  const lumens = candelas.times(steradians).brand(dim.LuminousFlux).withSymbol(
+    "lm",
+  );
 
   // Illuminance
-  const lux = lumens.per(squareMeters).withSymbol("lx") as Unit<
-    T,
-    dim.Illuminance
-  >;
+  const lux = lumens.per(squareMeters).brand(dim.Illuminance);
 
   // Radioactivity
-  const becquerels = seconds.reciprocal().withSymbol("Bq") as Unit<
-    T,
-    dim.Radioactivity
-  >;
+  const becquerels = seconds.reciprocal().brand(dim.Radioactivity).withSymbol(
+    "Bq",
+  );
 
   // Absorbed Dose
-  const grays = joules.per(kilograms).withSymbol("Gy") as Unit<
-    T,
-    dim.AbsorbedDose
-  >;
+  const grays = joules.per(kilograms).brand(dim.AbsorbedDose).withSymbol("Gy");
 
   // Equivalent Dose
-  const sieverts = joules.per(kilograms).withSymbol("Sv") as Unit<
-    T,
-    dim.EquivalentDose
-  >;
+  const sieverts = joules.per(kilograms).brand(dim.EquivalentDose).withSymbol(
+    "Sv",
+  );
 
   // ==========================================================================
   // Trigonometric Functions

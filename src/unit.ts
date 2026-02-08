@@ -6,6 +6,7 @@ import {
   Over,
   Reciprocal,
   Squared,
+  type StructurallyEqual,
   Times,
 } from "./dimensions.ts";
 
@@ -258,6 +259,21 @@ export interface Unit<NumberType, D extends Dimensions> {
    * ```
    */
   simplify(): Unit<NumberType, D>;
+
+  /**
+   * Brands this unit with a specific dimension type for nominal typing.
+   * Only works if the target dimension is structurally compatible.
+   *
+   * Example:
+   * ```
+   * const squareMeters = meters.squared().brand(dim.Area);
+   * ```
+   *
+   * @param target The target dimension type to brand this unit with.
+   */
+  brand<Target extends Dimensions>(
+    target: StructurallyEqual<D, Target> extends true ? Target : never,
+  ): Unit<NumberType, Target>;
 }
 
 /**
@@ -789,6 +805,10 @@ export const makeUnitFactory = <NumberType>(
         this.scale,
         this.offset,
       );
+    }
+
+    brand<Target extends Dimensions>(target: Target): Unit<NumberType, Target> {
+      return makeUnit(this.symbol, target, this.scale, this.offset);
     }
   }
 

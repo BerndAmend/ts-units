@@ -47,6 +47,30 @@ export type Dimensions =
   & Branding;
 
 /**
+ * Extracts dimension keys, excluding the Brand symbol.
+ */
+type DimensionKeys<D extends Dimensions> = Exclude<keyof D, typeof Brand>;
+
+/**
+ * Checks if two dimensions have the same structure (same keys with same exponents).
+ * This allows compile-time validation when branding units with specific dimension types.
+ *
+ * Returns `true` if structurally equal, `false` otherwise.
+ */
+export type StructurallyEqual<A extends Dimensions, B extends Dimensions> =
+  DimensionKeys<A> extends DimensionKeys<B>
+    ? DimensionKeys<B> extends DimensionKeys<A>
+      ? [DimensionKeys<A>] extends [never] ? true // Both are dimensionless
+      : {
+        [K in DimensionKeys<A>]: A[K] extends B[K]
+          ? B[K] extends A[K] ? true : false
+          : false;
+      }[DimensionKeys<A>] extends true ? true
+      : false
+    : false
+    : false;
+
+/**
  * The dimensions of a dimensionless quantity. Also known as the dimensions of
  * the "quantity of dimension one".
  *
