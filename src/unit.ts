@@ -247,6 +247,17 @@ export interface Unit<NumberType, D extends Dimensions> {
   per<D2 extends Divisor<D>>(
     unit: Unit<NumberType, D2>,
   ): Unit<NumberType, Over<D, D2>>;
+
+  /**
+   * Returns a new unit with a simplified symbol.
+   *
+   * Example:
+   * ```
+   * const complex = meters.times(seconds).per(seconds); // "m⋅s/s"
+   * const simple = complex.simplify(); // "m"
+   * ```
+   */
+  simplify(): Unit<NumberType, D>;
 }
 
 /**
@@ -442,6 +453,11 @@ export interface Quantity<NumberType, D extends Dimensions> {
    * as `<` or `>=`.
    */
   valueOf(): number;
+
+  /**
+   * Returns a new quantity with a simplified unit symbol.
+   */
+  simplify(): Quantity<NumberType, D>;
 }
 
 /**
@@ -495,6 +511,74 @@ export const makeUnitFactory = <NumberType>(
   ) => Quantity<NumberType, D>;
 } => {
   const { fromNative, toNative, add, sub, mul, div, pow, abs, compare } = math;
+
+  /**
+   * Simplifies a composite symbol by removing redundant dimension parts.
+   * For example, converts "km/h⋅h" to "km" when the dimensions cancel out.
+   */
+  function simplifySymbol(symbol: string): string {
+    // Remove empty dimension parts and redundant terms
+    // e.g., "m/s⋅s" -> "m", "km/h⋅h" -> "km"
+    const parts = symbol.split("⋅");
+    if (parts.length === 1) {
+      // Check for division patterns that might cancel
+      const divParts = symbol.split("/");
+      if (divParts.length === 2) {
+        const numerator = (divParts[0] as string).trim();
+        const denominator = (divParts[1] as string).trim();
+        // If numerator and denominator are identical, cancel them out (return "1")
+        if (numerator === denominator) {
+          return "1";
+        }
+      }
+      return symbol;
+    }
+
+    // For multiplication patterns, we need to track and cancel out matching parts
+    const allParts: string[] = [];
+    const numeratorParts: string[] = [];
+    const denominatorParts: string[] = [];
+
+    for (const part of parts) {
+      const trimmed = part.trim();
+      if (trimmed.includes("/")) {
+        const split = trimmed.split("/") as [string, string];
+        const num = split[0].trim();
+        const denom = split[1].trim();
+        numeratorParts.push(num);
+        denominatorParts.push(denom);
+      } else {
+        allParts.push(trimmed);
+      }
+    }
+
+    // Combine all numerator and denominator parts
+    const allNumerators = [...allParts, ...numeratorParts];
+    const allDenominators = [...denominatorParts];
+
+    // Cancel out matching parts
+    for (let i = allNumerators.length - 1; i >= 0; i--) {
+      for (let j = allDenominators.length - 1; j >= 0; j--) {
+        if (allNumerators[i] === allDenominators[j]) {
+          allNumerators.splice(i, 1);
+          allDenominators.splice(j, 1);
+          break;
+        }
+      }
+    }
+
+    // Rebuild the symbol
+    if (allNumerators.length === 0 && allDenominators.length === 0) {
+      return "1";
+    }
+
+    let result = allNumerators.join("⋅") || "1";
+    if (allDenominators.length > 0) {
+      result += "/" + allDenominators.join("⋅");
+    }
+
+    return result;
+  }
 
   /**
    * Creates a new unit.
@@ -697,6 +781,15 @@ export const makeUnitFactory = <NumberType>(
         pow(this.scale, fromNative(3)),
       );
     }
+
+    simplify(): Unit<NumberType, D> {
+      return makeUnit(
+        simplifySymbol(this.symbol),
+        this.dimension,
+        this.scale,
+        this.offset,
+      );
+    }
   }
 
   /**
@@ -881,6 +974,10 @@ export const makeUnitFactory = <NumberType>(
 
     valueOf() {
       return toNative(this.value());
+    }
+
+    simplify(): Quantity<NumberType, D> {
+      return new QuantityImpl(this.amount, this.unit.simplify());
     }
 
     value() {
