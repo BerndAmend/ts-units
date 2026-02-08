@@ -530,9 +530,9 @@ We ensure type safety by encoding the dimensions of units and quantities as
 For example, the dimension mentioned above are defined as:
 
 ```ts
-type Length = { length: 1, readonly [Brand]?: unique symbol };
-type Area = { length: 2, readonly [Brand]?: unique symbol  };
-type Speed = { length: 1; time: -1, readonly [Brand]?: unique symbol  };
+type Length = { length: 1; readonly [Brand]?: unique symbol };
+type Area = { length: 2; readonly [Brand]?: unique symbol };
+type Speed = { length: 1; time: -1; readonly [Brand]?: unique symbol };
 ```
 
 To define a new dimension, start by defining a literal type for it. You’ll also
@@ -542,7 +542,7 @@ introduce quantities of money you might write:
 
 ```ts
 // In money/dimension.ts
-export type Money = { money: 1, readonly [Brand]?: unique symbol };
+export type Money = { money: 1; readonly [Brand]?: unique symbol };
 export const Money: Money = { money: 1 };
 ```
 
