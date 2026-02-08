@@ -1,6 +1,7 @@
 import {
   type AbsorbedDose,
   becquerels,
+  dimensions,
   type Energy,
   type EquivalentDose,
   type Force,
@@ -99,6 +100,19 @@ describe("Type Safety", () => {
 
       // @ts-expect-error AbsorbedDose should not be assignable to EquivalentDose
       useEquivalent(g);
+    });
+  });
+
+  describe("brand() compile-time safety", () => {
+    it("should NOT allow branding with incompatible dimensions", () => {
+      // @ts-expect-error Area (length: 2) is not compatible with Speed (length: 1, time: -1)
+      const invalid = meters.squared().brand(dimensions.Speed);
+      expect(invalid).toBeDefined();
+    });
+
+    it("should allow branding with compatible dimensions", () => {
+      const valid = meters.squared().brand(dimensions.Area);
+      expect(valid).toBeDefined();
     });
   });
 });
