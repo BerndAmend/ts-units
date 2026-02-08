@@ -145,10 +145,6 @@ export interface AllUnits<T> {
   nanoseconds: Unit<T, dim.Time>;
   minutes: Unit<T, dim.Time>;
   hours: Unit<T, dim.Time>;
-  s: Unit<T, dim.Time>;
-  msec: Unit<T, dim.Time>;
-  usec: Unit<T, dim.Time>;
-  nsec: Unit<T, dim.Time>;
 
   // Electric Current
   amperes: Unit<T, dim.Current>;
@@ -273,6 +269,7 @@ export interface AllUnits<T> {
   sieverts: Unit<T, dim.EquivalentDose>;
 }
 
+/** Any unit with number type. */
 export type AnyUnit = Unit<number, dim.Dimensions>;
 
 /** Trigonometric functions for angles. */
@@ -299,7 +296,7 @@ export interface AngleFunctions<T> {
  */
 export function withValueType<T>(
   math: MathFunctions<T>,
-): AllUnits<T> & AngleFunctions<T> {
+): { units: AllUnits<T>; trig: AngleFunctions<T> } {
   const { makeUnit } = makeUnitFactory<T>(math);
 
   // ==========================================================================
@@ -344,10 +341,6 @@ export function withValueType<T>(
   const nanoseconds = seconds.withSiPrefix("n");
   const minutes = seconds.times(60).withSymbol("min");
   const hours = minutes.times(60).withSymbol("h");
-  const s = seconds;
-  const msec = milliseconds;
-  const usec = microseconds;
-  const nsec = nanoseconds;
 
   // Electric Current
   const amperes = makeUnit("A", dim.Current);
@@ -529,7 +522,7 @@ export function withValueType<T>(
     y: T,
   ): Quantity<T, dim.Angle> => radians(math.atan2(x, y));
 
-  return {
+  const units: AllUnits<T> = {
     // Length
     meters,
     kilometers,
@@ -568,10 +561,6 @@ export function withValueType<T>(
     nanoseconds,
     minutes,
     hours,
-    s,
-    msec,
-    usec,
-    nsec,
 
     // Electric Current
     amperes,
@@ -694,8 +683,9 @@ export function withValueType<T>(
 
     // Equivalent Dose
     sieverts,
+  };
 
-    // Trigonometric functions
+  const trig: AngleFunctions<T> = {
     sin,
     cos,
     tan,
@@ -704,286 +694,199 @@ export function withValueType<T>(
     atan,
     atan2,
   };
+
+  return { units, trig };
 }
 
 // ============================================================================
 // Default Units (using native number type)
 // ============================================================================
 
-const _units: AllUnits<number> & AngleFunctions<number> = withValueType(
-  NativeMath,
-);
+const _result: { units: AllUnits<number>; trig: AngleFunctions<number> } =
+  withValueType(NativeMath);
+export const allUnits: AllUnits<number> = _result.units;
+const _trig: AngleFunctions<number> = _result.trig;
 
 // Length
-export const meters = _units.meters;
-export const kilometers = _units.kilometers;
-export const centimeters = _units.centimeters;
-export const millimeters = _units.millimeters;
-export const micrometers = _units.micrometers;
-export const nanometers = _units.nanometers;
-export const picometers = _units.picometers;
-export const femtometers = _units.femtometers;
-export const angstroms = _units.angstroms;
-export const inches = _units.inches;
-export const feet = _units.feet;
-export const yards = _units.yards;
-export const miles = _units.miles;
-export const nauticalMiles = _units.nauticalMiles;
-export const fathoms = _units.fathoms;
-export const chains = _units.chains;
-export const furlongs = _units.furlongs;
-export const astronomicalUnits = _units.astronomicalUnits;
-export const microns = _units.microns;
-export const fermi = _units.fermi;
+export const meters = allUnits.meters;
+export const kilometers = allUnits.kilometers;
+export const centimeters = allUnits.centimeters;
+export const millimeters = allUnits.millimeters;
+export const micrometers = allUnits.micrometers;
+export const nanometers = allUnits.nanometers;
+export const picometers = allUnits.picometers;
+export const femtometers = allUnits.femtometers;
+export const angstroms = allUnits.angstroms;
+export const inches = allUnits.inches;
+export const feet = allUnits.feet;
+export const yards = allUnits.yards;
+export const miles = allUnits.miles;
+export const nauticalMiles = allUnits.nauticalMiles;
+export const fathoms = allUnits.fathoms;
+export const chains = allUnits.chains;
+export const furlongs = allUnits.furlongs;
+export const astronomicalUnits = allUnits.astronomicalUnits;
+export const microns = allUnits.microns;
+export const fermi = allUnits.fermi;
 
 // Mass
-export const kilograms = _units.kilograms;
-export const grams = _units.grams;
-export const milligrams = _units.milligrams;
-export const micrograms = _units.micrograms;
-export const tonnes = _units.tonnes;
-export const pounds = _units.pounds;
-export const ounces = _units.ounces;
+export const kilograms = allUnits.kilograms;
+export const grams = allUnits.grams;
+export const milligrams = allUnits.milligrams;
+export const micrograms = allUnits.micrograms;
+export const tonnes = allUnits.tonnes;
+export const pounds = allUnits.pounds;
+export const ounces = allUnits.ounces;
 
 // Time
-export const seconds = _units.seconds;
-export const milliseconds = _units.milliseconds;
-export const microseconds = _units.microseconds;
-export const nanoseconds = _units.nanoseconds;
-export const minutes = _units.minutes;
-export const hours = _units.hours;
-export const s = _units.s;
-export const msec = _units.msec;
-export const usec = _units.usec;
-export const nsec = _units.nsec;
+export const seconds = allUnits.seconds;
+export const milliseconds = allUnits.milliseconds;
+export const microseconds = allUnits.microseconds;
+export const nanoseconds = allUnits.nanoseconds;
+export const minutes = allUnits.minutes;
+export const hours = allUnits.hours;
 
 // Electric Current
-export const amperes = _units.amperes;
+export const amperes = allUnits.amperes;
 
 // Temperature
-export const kelvin = _units.kelvin;
-export const celsius = _units.celsius;
-export const fahrenheit = _units.fahrenheit;
-export const rankine = _units.rankine;
+export const kelvin = allUnits.kelvin;
+export const celsius = allUnits.celsius;
+export const fahrenheit = allUnits.fahrenheit;
+export const rankine = allUnits.rankine;
 
 // Amount of Substance
-export const mole = _units.mole;
+export const mole = allUnits.mole;
 
 // Luminous Intensity
-export const candelas = _units.candelas;
+export const candelas = allUnits.candelas;
 
 // Scalar
-export const scalar = _units.scalar;
-export const percent = _units.percent;
-export const permille = _units.permille;
-export const permyriad = _units.permyriad;
+export const scalar = allUnits.scalar;
+export const percent = allUnits.percent;
+export const permille = allUnits.permille;
+export const permyriad = allUnits.permyriad;
 
 // Angle
-export const radians = _units.radians;
-export const degrees = _units.degrees;
-export const gradians = _units.gradians;
-export const turns = _units.turns;
+export const radians = allUnits.radians;
+export const degrees = allUnits.degrees;
+export const gradians = allUnits.gradians;
+export const turns = allUnits.turns;
 
 // Solid Angle
-export const steradians = _units.steradians;
-export const squareDegrees = _units.squareDegrees;
+export const steradians = allUnits.steradians;
+export const squareDegrees = allUnits.squareDegrees;
 
 // Area
-export const squareMeters = _units.squareMeters;
+export const squareMeters = allUnits.squareMeters;
 
 // Volume
-export const cubicMeters = _units.cubicMeters;
-export const liters = _units.liters;
-export const milliliters = _units.milliliters;
-export const gallons = _units.gallons;
-export const cups = _units.cups;
-export const fluidOunces = _units.fluidOunces;
+export const cubicMeters = allUnits.cubicMeters;
+export const liters = allUnits.liters;
+export const milliliters = allUnits.milliliters;
+export const gallons = allUnits.gallons;
+export const cups = allUnits.cups;
+export const fluidOunces = allUnits.fluidOunces;
 
 // Speed
-export const metersPerSecond = _units.metersPerSecond;
-export const kilometersPerHour = _units.kilometersPerHour;
-export const milesPerHour = _units.milesPerHour;
-export const knots = _units.knots;
-export const feetPerSecond = _units.feetPerSecond;
+export const metersPerSecond = allUnits.metersPerSecond;
+export const kilometersPerHour = allUnits.kilometersPerHour;
+export const milesPerHour = allUnits.milesPerHour;
+export const knots = allUnits.knots;
+export const feetPerSecond = allUnits.feetPerSecond;
 
 // Acceleration
-export const metersPerSecondSquared = _units.metersPerSecondSquared;
+export const metersPerSecondSquared = allUnits.metersPerSecondSquared;
 
 // Angular Speed
-export const radiansPerSecond = _units.radiansPerSecond;
-export const degreesPerSecond = _units.degreesPerSecond;
+export const radiansPerSecond = allUnits.radiansPerSecond;
+export const degreesPerSecond = allUnits.degreesPerSecond;
 
 // Frequency
-export const hertz = _units.hertz;
+export const hertz = allUnits.hertz;
 
 // Force
-export const newtons = _units.newtons;
+export const newtons = allUnits.newtons;
 
 // Energy
-export const joules = _units.joules;
-export const kilojoules = _units.kilojoules;
-export const calories = _units.calories;
-export const kilocalories = _units.kilocalories;
-export const kilowattHours = _units.kilowattHours;
-export const electronvolts = _units.electronvolts;
+export const joules = allUnits.joules;
+export const kilojoules = allUnits.kilojoules;
+export const calories = allUnits.calories;
+export const kilocalories = allUnits.kilocalories;
+export const kilowattHours = allUnits.kilowattHours;
+export const electronvolts = allUnits.electronvolts;
 
 // Power
-export const watts = _units.watts;
+export const watts = allUnits.watts;
 
 // Pressure
-export const pascals = _units.pascals;
-export const bar = _units.bar;
-export const millibar = _units.millibar;
-export const psi = _units.psi;
-export const atmospheres = _units.atmospheres;
+export const pascals = allUnits.pascals;
+export const bar = allUnits.bar;
+export const millibar = allUnits.millibar;
+export const psi = allUnits.psi;
+export const atmospheres = allUnits.atmospheres;
 
 // Electric Charge
-export const coulombs = _units.coulombs;
+export const coulombs = allUnits.coulombs;
 
 // Voltage
-export const volts = _units.volts;
+export const volts = allUnits.volts;
 
 // Resistance
-export const ohms = _units.ohms;
+export const ohms = allUnits.ohms;
 
 // Conductance
-export const siemens = _units.siemens;
+export const siemens = allUnits.siemens;
 
 // Capacitance
-export const farads = _units.farads;
-export const microfarads = _units.microfarads;
-export const nanofarads = _units.nanofarads;
-export const picofarads = _units.picofarads;
+export const farads = allUnits.farads;
+export const microfarads = allUnits.microfarads;
+export const nanofarads = allUnits.nanofarads;
+export const picofarads = allUnits.picofarads;
 
 // Inductance
-export const henries = _units.henries;
+export const henries = allUnits.henries;
 
 // Magnetic Flux
-export const webers = _units.webers;
+export const webers = allUnits.webers;
 
 // Magnetic Induction
-export const teslas = _units.teslas;
+export const teslas = allUnits.teslas;
 
 // Luminous Flux
-export const lumens = _units.lumens;
+export const lumens = allUnits.lumens;
 
 // Illuminance
-export const lux = _units.lux;
+export const lux = allUnits.lux;
 
 // Radioactivity
-export const becquerels = _units.becquerels;
+export const becquerels = allUnits.becquerels;
 
 // Absorbed Dose
-export const grays = _units.grays;
+export const grays = allUnits.grays;
 
 // Equivalent Dose
-export const sieverts = _units.sieverts;
+export const sieverts = allUnits.sieverts;
 
 // Trigonometric functions
-export const sin = _units.sin;
-export const cos = _units.cos;
-export const tan = _units.tan;
-export const asin = _units.asin;
-export const acos = _units.acos;
-export const atan = _units.atan;
-export const atan2 = _units.atan2;
+export const sin = _trig.sin;
+export const cos = _trig.cos;
+export const tan = _trig.tan;
+export const asin = _trig.asin;
+export const acos = _trig.acos;
+export const atan = _trig.atan;
+export const atan2 = _trig.atan2;
 
-export const allUnits: AnyUnit[] = [
-  meters,
-  kilometers,
-  centimeters,
-  millimeters,
-  micrometers,
-  nanometers,
-  picometers,
-  femtometers,
-  angstroms,
-  inches,
-  feet,
-  yards,
-  miles,
-  nauticalMiles,
-  fathoms,
-  chains,
-  furlongs,
-  astronomicalUnits,
-  kilograms,
-  grams,
-  milligrams,
-  micrograms,
-  tonnes,
-  pounds,
-  ounces,
-  seconds,
-  milliseconds,
-  microseconds,
-  nanoseconds,
-  minutes,
-  hours,
-  amperes,
-  kelvin,
-  celsius,
-  fahrenheit,
-  rankine,
-  mole,
-  candelas,
-  scalar,
-  percent,
-  permille,
-  permyriad,
-  radians,
-  degrees,
-  gradians,
-  turns,
-  steradians,
-  squareDegrees,
-  squareMeters,
-  cubicMeters,
-  liters,
-  milliliters,
-  gallons,
-  cups,
-  fluidOunces,
-  metersPerSecond,
-  kilometersPerHour,
-  milesPerHour,
-  knots,
-  feetPerSecond,
-  metersPerSecondSquared,
-  radiansPerSecond,
-  degreesPerSecond,
-  hertz,
-  newtons,
-  joules,
-  kilojoules,
-  calories,
-  kilocalories,
-  kilowattHours,
-  electronvolts,
-  watts,
-  pascals,
-  bar,
-  millibar,
-  psi,
-  atmospheres,
-  coulombs,
-  volts,
-  ohms,
-  siemens,
-  farads,
-  microfarads,
-  nanofarads,
-  picofarads,
-  henries,
-  webers,
-  teslas,
-  lumens,
-  lux,
-  becquerels,
-  grays,
-  sieverts,
-];
-
-export function parse(input: string): Quantity<number, dim.Dimensions> {
-  return parseBase(input, allUnits);
+export function parse(
+  input: string,
+  units?:
+    | Unit<number, dim.Dimensions>[]
+    | Record<string, Unit<number, dim.Dimensions>>
+    | AllUnits<number>,
+): Quantity<number, dim.Dimensions> {
+  const unitsArg = (units || allUnits) as unknown as Record<
+    string,
+    Unit<number, dim.Dimensions>
+  >;
+  return parseBase(input, unitsArg);
 }

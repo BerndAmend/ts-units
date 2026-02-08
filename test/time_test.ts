@@ -1,13 +1,20 @@
-import { hours, minutes, msec, nanoseconds, s, usec } from "ts-units";
+import {
+  hours,
+  microseconds,
+  milliseconds,
+  minutes,
+  nanoseconds,
+  seconds,
+} from "ts-units";
 import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 
 describe("time smoke tests", () => {
   const equalUnits = [
-    { a: nanoseconds(1234), b: usec(1.234) },
-    { a: usec(1234), b: msec(1.234) },
-    { a: msec(1234), b: s(1.234) },
-    { a: s(1234), b: minutes(20.566666666666667) },
+    { a: nanoseconds(1234), b: microseconds(1.234) },
+    { a: microseconds(1234), b: milliseconds(1.234) },
+    { a: milliseconds(1234), b: seconds(1.234) },
+    { a: seconds(1234), b: minutes(20.566666666666667) },
     { a: minutes(1234), b: hours(20.566666666666667) },
   ];
 

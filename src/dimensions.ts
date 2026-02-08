@@ -71,6 +71,35 @@ export type StructurallyEqual<A extends Dimensions, B extends Dimensions> =
     : false;
 
 /**
+ * Checks if two dimensions are equal at runtime.
+ * Compares all exponent keys and the Brand symbol.
+ */
+export function dimensionsEqual(a: Dimensions, b: Dimensions): boolean {
+  // Get all keys from both dimensions (excluding Brand)
+  const keysA = Object.keys(a);
+  const keysB = Object.keys(b);
+
+  // Check if same number of keys
+  if (keysA.length !== keysB.length) {
+    return false;
+  }
+
+  // Check all exponents match
+  for (const key of keysA) {
+    if (a[key] !== b[key]) {
+      return false;
+    }
+  }
+
+  // Check Brand symbol matches (for nominal typing)
+  if (a[Brand] !== b[Brand]) {
+    return false;
+  }
+
+  return true;
+}
+
+/**
  * The dimensions of a dimensionless quantity. Also known as the dimensions of
  * the "quantity of dimension one".
  *

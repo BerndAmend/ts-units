@@ -1,6 +1,7 @@
 import {
   Cubed,
   type Dimensions,
+  dimensionsEqual,
   type Divisor,
   type Multiplicand,
   Over,
@@ -855,6 +856,13 @@ export const makeUnitFactory = <NumberType>(
     }
 
     in(other: Unit<NumberType, D>): Quantity<NumberType, D> {
+      // Runtime dimension check for type safety with generic Dimensions
+      if (!dimensionsEqual(this.dimension, other.dimension)) {
+        throw new Error(
+          `Dimension mismatch: cannot convert ${this.unit.symbol} to ${other.symbol}`,
+        );
+      }
+
       // If the unit requested is our unit, don't do any work.
       if (this.unit === other) {
         return this;
@@ -980,7 +988,9 @@ export const makeUnitFactory = <NumberType>(
     }
 
     toString() {
-      return this.toLocaleString(DEFAULT_LOCALE);
+      return this.toLocaleString(DEFAULT_LOCALE, {
+        maximumSignificantDigits: 6,
+      });
     }
 
     toLocaleString(
@@ -1051,8 +1061,11 @@ export const makeQuantity = unitFactory.makeQuantity;
  */
 export function parse(
   input: string,
-  units: Unit<number, Dimensions>[],
+  units:
+    | Unit<number, Dimensions>[]
+    | Record<string, Unit<number, Dimensions>>,
 ): Quantity<number, Dimensions> {
+  const unitList = Array.isArray(units) ? units : Object.values(units);
   const match = input.trim().match(/^([\d.,]+)\s*(.*)$/);
 
   if (!match || !match[1]) {
@@ -1086,14 +1099,14 @@ export function parse(
       }
 
       const baseSymbol = powerMatch[1]!;
-      let baseUnit = units.find((u) => u.symbol === baseSymbol);
+      let baseUnit = unitList.find((u) => u.symbol === baseSymbol);
 
       // Try SI prefixes
       if (!baseUnit) {
         for (const [prefix, scale] of Object.entries(SI_PREFIX)) {
           if (baseSymbol.startsWith(prefix)) {
             const potentialBaseSymbol = baseSymbol.substring(prefix.length);
-            const potentialBaseUnit = units.find((u) =>
+            const potentialBaseUnit = unitList.find((u) =>
               u.symbol === potentialBaseSymbol
             );
             if (potentialBaseUnit) {
@@ -1130,8 +1143,7 @@ export function parse(
 
         let acc = baseUnit;
         for (let i = 1; i < absPower; i++) {
-          // deno-lint-ignore no-explicit-any
-          acc = acc.times(baseUnit as any) as any;
+          acc = acc.times(baseUnit);
         }
         tokenUnit = acc;
 
@@ -1143,8 +1155,7 @@ export function parse(
       if (partUnit === null) {
         partUnit = tokenUnit;
       } else {
-        // deno-lint-ignore no-explicit-any
-        partUnit = partUnit.times(tokenUnit as any) as any;
+        partUnit = partUnit.times(tokenUnit);
       }
     }
     return partUnit;
@@ -1165,8 +1176,7 @@ export function parse(
   } else if (!numUnit && denUnit) {
     resultUnit = denUnit.reciprocal();
   } else if (numUnit && denUnit) {
-    // deno-lint-ignore no-explicit-any
-    resultUnit = numUnit.per(denUnit as any) as any;
+    resultUnit = numUnit.per(denUnit);
   } else if (
     !numUnit && !denUnit && parts.length === 2 && parts[0]!.trim() === "1"
   ) {
