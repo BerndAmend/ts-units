@@ -11,6 +11,8 @@ import {
   Times,
 } from "./dimensions.ts";
 
+export type { Divisor, Multiplicand, StructurallyEqual } from "./dimensions.ts";
+
 /**
  * The library is using by default the native number of JavaScript.
  * As we know, it is not precise, and could lead to a calculation error.
@@ -23,26 +25,42 @@ import {
  */
 export interface MathFunctions<T> {
   // Arithmetic
+  /** Convert a native number to the generic number type */
   fromNative(value: number): T;
+  /** Convert a generic number to a native number */
   toNative(value: T): number;
+  /** Add two generic numbers */
   add(left: T, right: T): T;
+  /** Subtract two generic numbers */
   sub(left: T, right: T): T;
+  /** Multiply two generic numbers */
   mul(left: T, right: T): T;
+  /** Divide two generic numbers */
   div(left: T, right: T): T;
+  /** Raise a generic number to a power */
   pow(base: T, exponent: T): T;
+  /** Get the absolute value of a generic number */
   abs(value: T): T;
   // 1 => left > right
   // 0 => left === right
   // -1 => left < right
+  /** Compare two generic numbers. Returns 1 if left > right, 0 if equal, -1 if left < right */
   compare(left: T, right: T): number;
 
   // Geometric
+  /** Calculate the sine of a generic number */
   sin(value: T): T;
+  /** Calculate the cosine of a generic number */
   cos(value: T): T;
+  /** Calculate the tangent of a generic number */
   tan(value: T): T;
+  /** Calculate the arcsine of a generic number */
   asin(value: T): T;
+  /** Calculate the arccosine of a generic number */
   acos(value: T): T;
+  /** Calculate the arctangent of a generic number */
   atan(value: T): T;
+  /** Calculate the arctangent of the quotient of its arguments */
   atan2(left: T, right: T): T;
 }
 
@@ -231,21 +249,26 @@ export interface Unit<NumberType, D extends Dimensions> {
   withOffset(offset: number): Unit<NumberType, D>;
 
   /**
-   * Divides this one by another.
+   * Divides this one by a number.
    *
    * This can be used to create scaled units:
    *  ```
    * const feet = yards.times(1 / 3).withSymbol('ft');
    * ```
    *
-   * As well as units with combined dimensions:
+   * @param unit The unit to divide this one with.
+   */
+  per(amount: number): Unit<NumberType, D>;
+  /**
+   * Divides this one by another.
+   *
+   * This can be used to create units with combined dimensions:
    * ```
    * const speed = meters.per(seconds);
    * ```
    *
    * @param unit The unit to divide this one with.
    */
-  per(amount: number): Unit<NumberType, D>;
   per<D2 extends Divisor<D>>(
     unit: Unit<NumberType, D2>,
   ): Unit<NumberType, Over<D, D2>>;
@@ -343,8 +366,7 @@ export interface Quantity<NumberType, D extends Dimensions> {
    *
    * @param quantity The quantity to add to this one.
    */
-  plus(quantity: number): Quantity<NumberType, D>;
-  plus(quantity: Quantity<NumberType, D>): Quantity<NumberType, D>;
+  plus(quantity: number | Quantity<NumberType, D>): Quantity<NumberType, D>;
 
   /**
    * Subtracts a quantity from this one, returning a new quantity in the units
@@ -357,8 +379,7 @@ export interface Quantity<NumberType, D extends Dimensions> {
    *
    * @param quantity The quantity to subtract from this one.
    */
-  minus(quantity: number): Quantity<NumberType, D>;
-  minus(quantity: Quantity<NumberType, D>): Quantity<NumberType, D>;
+  minus(quantity: number | Quantity<NumberType, D>): Quantity<NumberType, D>;
 
   /**
    * Convert this quantity to another unit of the same dimensions.
@@ -373,6 +394,17 @@ export interface Quantity<NumberType, D extends Dimensions> {
   in(unit: Unit<NumberType, D>): Quantity<NumberType, D>;
 
   /**
+   * Multiplies this quantity with a number.
+   *
+   * Examples:
+   * ```
+   * const distance = meters(10).times(3);
+   * ```
+   *
+   * @param quantity The quantity to multiply this one with.
+   */
+  times(quantity: number): Quantity<NumberType, D>;
+  /**
    * Multiplies this quantity with another.
    *
    * Examples:
@@ -383,11 +415,21 @@ export interface Quantity<NumberType, D extends Dimensions> {
    *
    * @param quantity The quantity to multiply this one with.
    */
-  times(quantity: number): Quantity<NumberType, D>;
   times<D2 extends Multiplicand<D>>(
     quantity: Quantity<NumberType, D2>,
   ): Quantity<NumberType, Times<D, D2>>;
 
+  /**
+   * Divides this quantity by a number.
+   *
+   * Example:
+   * ```
+   * const distance = meters(5).per(3);
+   * ```
+   *
+   * @param quantity The quantity to divide this one with.
+   */
+  per(quantity: number): Quantity<NumberType, D>;
   /**
    * Divides this quantity by another.
    *
@@ -398,7 +440,6 @@ export interface Quantity<NumberType, D extends Dimensions> {
    *
    * @param quantity The quantity to divide this one with.
    */
-  per(quantity: number): Quantity<NumberType, D>;
   per<D2 extends Divisor<D>>(
     quantity: Quantity<NumberType, D2>,
   ): Quantity<NumberType, Over<D, D2>>;
@@ -449,6 +490,11 @@ export interface Quantity<NumberType, D extends Dimensions> {
    * ```
    */
   toString(): string;
+  /**
+   * Returns a string representation of the quantity.
+   * @param locales A string with a BCP 47 language tag, or an array of such strings.
+   * @param options An object with some or all of the properties of the Intl.NumberFormatOptions object.
+   */
   toLocaleString(
     locales?: string | string[],
     options?: Intl.NumberFormatOptions,
@@ -482,7 +528,10 @@ export interface Quantity<NumberType, D extends Dimensions> {
  * for creating derived units using `Unit.withSiPrefix`.
  */
 export type SiPrefix = keyof typeof SI_PREFIX;
-const SI_PREFIX = {
+/**
+ * SI prefixes for unit scaling.
+ */
+export const SI_PREFIX = {
   Y: 1e24,
   Z: 1e21,
   E: 1e18,
@@ -513,6 +562,10 @@ const SI_PREFIX = {
  */
 const DEFAULT_LOCALE = "en-us";
 
+/**
+ * Factory function to create unit and quantity creators with a specific math implementation.
+ * @param math The math implementation to use (e.g., NativeMath).
+ */
 export const makeUnitFactory = <NumberType>(
   math: MathFunctions<NumberType>,
 ): {
@@ -1049,8 +1102,28 @@ const unitFactory: {
     unit: Unit<number, D>,
   ) => Quantity<number, D>;
 } = makeUnitFactory(NativeMath);
-export const makeUnit = unitFactory.makeUnit;
-export const makeQuantity = unitFactory.makeQuantity;
+/**
+ * Creates a new unit with the default native math implementation.
+ * @param symbol The symbol for the unit.
+ * @param dimension The dimension of the unit.
+ * @param scale The scale of the unit relative to the base unit.
+ * @param offset The offset of the unit relative to the base unit.
+ */
+export const makeUnit: <D extends Dimensions>(
+  symbol: string,
+  dimension: D,
+  scale?: number,
+  offset?: number,
+) => Unit<number, D> = unitFactory.makeUnit;
+/**
+ * Creates a new quantity with the default native math implementation.
+ * @param amount The amount of the quantity.
+ * @param unit The unit of the quantity.
+ */
+export const makeQuantity: <D extends Dimensions>(
+  amount: number,
+  unit: Unit<number, D>,
+) => Quantity<number, D> = unitFactory.makeQuantity;
 
 /**
  * Parses a string into a quantity.
