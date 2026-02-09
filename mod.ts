@@ -870,14 +870,28 @@ export const grays = allUnits.grays;
 export const sieverts = allUnits.sieverts;
 
 // Trigonometric functions
-export const sin = _trig.sin;
-export const cos = _trig.cos;
-export const tan = _trig.tan;
-export const asin = _trig.asin;
-export const acos = _trig.acos;
-export const atan = _trig.atan;
-export const atan2 = _trig.atan2;
+// Trigonometric functions
+/** Calculate the sine of an angle. */
+export const sin: (angle: Angle) => number = _trig.sin;
+/** Calculate the cosine of an angle. */
+export const cos: (angle: Angle) => number = _trig.cos;
+/** Calculate the tangent of an angle. */
+export const tan: (angle: Angle) => number = _trig.tan;
+/** Calculate the arcsine of a number. */
+export const asin: (value: number) => Angle = _trig.asin;
+/** Calculate the arccosine of a number. */
+export const acos: (value: number) => Angle = _trig.acos;
+/** Calculate the arctangent of a number. */
+export const atan: (value: number) => Angle = _trig.atan;
+/** Calculate the arctangent of the quotient of its arguments. */
+export const atan2: (x: number, y: number) => Angle = _trig.atan2;
 
+/**
+ * Parses a string into a quantity.
+ * @param input The string to parse.
+ * @param units A list or object of allowed units.
+ * @returns The parsed quantity.
+ */
 export function parse(
   input: string,
   units?:
