@@ -333,6 +333,13 @@ export const Acceleration: Acceleration = { length: 1, time: -2 };
 export type AngularSpeed = { time: -1; readonly [Brand]?: unique symbol };
 export const AngularSpeed: AngularSpeed = { time: -1 };
 
+/** The dimensions of angular acceleration. Denoted by `[T]^-2`. */
+export type AngularAcceleration = {
+  time: -2;
+  readonly [Brand]?: unique symbol;
+};
+export const AngularAcceleration: AngularAcceleration = { time: -2 };
+
 /** The dimensions of frequency. Denoted by `[T]^-1`. */
 export type Frequency = { time: -1; readonly [Brand]?: unique symbol };
 export const Frequency: Frequency = { time: -1 };

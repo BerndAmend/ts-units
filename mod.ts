@@ -64,6 +64,11 @@ export type Speed<T = number> = Quantity<T, dim.Speed>;
 export type Acceleration<T = number> = Quantity<T, dim.Acceleration>;
 /** A quantity of angular speed. */
 export type AngularSpeed<T = number> = Quantity<T, dim.AngularSpeed>;
+/** A quantity of angular acceleration. */
+export type AngularAcceleration<T = number> = Quantity<
+  T,
+  dim.AngularAcceleration
+>;
 /** A quantity of frequency. */
 export type Frequency<T = number> = Quantity<T, dim.Frequency>;
 /** A quantity of force. */
@@ -202,6 +207,10 @@ export interface AllUnits<T> {
   // Angular Speed
   radiansPerSecond: Unit<T, dim.AngularSpeed>;
   degreesPerSecond: Unit<T, dim.AngularSpeed>;
+
+  // Angular Acceleration
+  radiansPerSecondSquared: Unit<T, dim.AngularAcceleration>;
+  degreesPerSecondSquared: Unit<T, dim.AngularAcceleration>;
 
   // Frequency
   hertz: Unit<T, dim.Frequency>;
@@ -413,6 +422,14 @@ export function withValueType<T>(
   const radiansPerSecond = radians.per(seconds).brand(dim.AngularSpeed);
   const degreesPerSecond = degrees.per(seconds).brand(dim.AngularSpeed);
 
+  // Angular Acceleration
+  const radiansPerSecondSquared = radiansPerSecond.squared().brand(
+    dim.AngularAcceleration,
+  );
+  const degreesPerSecondSquared = degreesPerSecond.squared().brand(
+    dim.AngularAcceleration,
+  );
+
   // Frequency
   const hertz = seconds.reciprocal().brand(dim.Frequency).withSymbol("Hz");
 
@@ -619,6 +636,10 @@ export function withValueType<T>(
     radiansPerSecond,
     degreesPerSecond,
 
+    // Angular Acceleration
+    radiansPerSecondSquared,
+    degreesPerSecondSquared,
+
     // Frequency
     hertz,
 
@@ -802,6 +823,10 @@ export const metersPerSecondSquared = allUnits.metersPerSecondSquared;
 // Angular Speed
 export const radiansPerSecond = allUnits.radiansPerSecond;
 export const degreesPerSecond = allUnits.degreesPerSecond;
+
+// Angular Acceleration
+export const radiansPerSecondSquared = allUnits.radiansPerSecondSquared;
+export const degreesPerSecondSquared = allUnits.degreesPerSecondSquared;
 
 // Frequency
 export const hertz = allUnits.hertz;
