@@ -14,8 +14,8 @@ describe("time smoke tests", () => {
     { a: nanoseconds(1234), b: microseconds(1.234) },
     { a: microseconds(1234), b: milliseconds(1.234) },
     { a: milliseconds(1234), b: seconds(1.234) },
-    { a: seconds(1234), b: minutes(20.566666666666667) },
-    { a: minutes(1234), b: hours(20.566666666666667) },
+    { a: seconds(1234), b: minutes(1234 / 60) },
+    { a: minutes(1234), b: hours(1234 / 60) },
   ];
 
   equalUnits.forEach(({ a, b }) => {

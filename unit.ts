@@ -580,7 +580,15 @@ export const makeUnitFactory = <NumberType>(
     unit: Unit<NumberType, D>,
   ) => Quantity<NumberType, D>;
 } => {
-  const { fromNative, toNative, add, sub, mul, div, pow, abs, compare } = math;
+  const fromNative = math.fromNative.bind(math);
+  const toNative = math.toNative.bind(math);
+  const add = math.add.bind(math);
+  const sub = math.sub.bind(math);
+  const mul = math.mul.bind(math);
+  const div = math.div.bind(math);
+  const pow = math.pow.bind(math);
+  const abs = math.abs.bind(math);
+  const compare = math.compare.bind(math);
 
   /**
    * Simplifies a composite symbol by removing redundant dimension parts.

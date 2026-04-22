@@ -18,5 +18,5 @@ Deno.bench("plus", () => {
 });
 
 Deno.bench("plus without ts-units", () => {
-  20 + 11.8872;
+  void (20 + 11.8872);
 });

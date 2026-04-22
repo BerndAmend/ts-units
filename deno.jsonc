@@ -2,7 +2,9 @@
   "name": "@bernd/ts-units",
   "version": "3.2.0",
   "license": "Apache-2.0",
-
+  "tasks": {
+    "eslint": "deno run -A jsr:@sigmasd/deno-eslint"
+  },
   "exports": "./mod.ts",
   "imports": {
     "ts-units": "./mod.ts",
@@ -19,7 +21,19 @@
   },
   "lint": {
     "rules": {
-      "include": ["no-slow-types"]
+      "tags": [
+        "recommended"
+      ],
+      "include": [
+        "no-slow-types",
+        "eqeqeq",
+        "guard-for-in",
+        "no-self-compare",
+        "no-sync-fn-in-async-fn",
+        "no-throw-literal",
+        "no-useless-rename",
+        "single-var-declarator"
+      ]
     }
   }
 }
