@@ -927,3 +927,34 @@ export function parse(
   const unitsArg = units || allUnits;
   return parseBase(input, unitsArg);
 }
+
+/**
+ * Returns whether the given value is most likely a quantity.
+ *
+ * This is a runtime duck-type check. It is useful for distinguishing
+ * quantities from plain numbers and from units, for example when a function
+ * accepts either:
+ * ```
+ * const distance = isQuantity(value) ? value : meters(value);
+ * ```
+ *
+ * Note that this only inspects the shape of the value, so an object that
+ * mimics the `Quantity` interface will be reported as a quantity as well.
+ *
+ * @param x The value to check.
+ * @returns `true` if `x` looks like a `Quantity`, `false` otherwise.
+ */
+export function isQuantity(x: unknown): x is Quantity<number, dim.Dimensions> {
+  if (typeof x !== "object" || x === null) {
+    return false;
+  }
+
+  const candidate = x as Partial<Quantity<number, dim.Dimensions>>;
+  return (
+    "amount" in candidate &&
+    typeof candidate.value === "function" &&
+    typeof candidate.in === "function" &&
+    typeof candidate.unit === "function" &&
+    candidate.dimension !== undefined
+  );
+}

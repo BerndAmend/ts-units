@@ -8,6 +8,7 @@ import {
   type Frequency,
   grays,
   hertz,
+  isQuantity,
   kilograms,
   type Length,
   type Mass,
@@ -100,6 +101,25 @@ describe("Type Safety", () => {
 
       // @ts-expect-error AbsorbedDose should not be assignable to EquivalentDose
       useEquivalent(g);
+    });
+  });
+
+  describe("isQuantity narrowing", () => {
+    it("narrows an unknown value to a usable quantity", () => {
+      const value: unknown = meters(5);
+      if (isQuantity(value)) {
+        expect(value.amount).toBe(5);
+        expect(value.value()).toBe(5);
+      }
+    });
+
+    it("should NOT allow assigning a narrowed Speed to Length", () => {
+      const value: Length | Speed = metersPerSecond(5);
+      if (isQuantity(value)) {
+        // @ts-expect-error a narrowed quantity retains its dimension
+        const length: Length = value;
+        expect(length).toBeDefined();
+      }
     });
   });
 
