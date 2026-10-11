@@ -7,28 +7,12 @@
  */
 
 export * as dimensions from "./dimensions.ts";
-export {
-  Brand,
-  type Branding,
-  Cubed,
-  type Dimensions,
-  type Over,
-  Reciprocal,
-  Squared,
-  Times,
-} from "./dimensions.ts";
+export { Brand, type Branding, Cubed, type Dimensions, type Over, Reciprocal, Squared, Times } from "./dimensions.ts";
 export * from "./exponent.ts";
 export * from "./unit.ts";
 
 import * as dim from "./dimensions.ts";
-import {
-  makeUnitFactory,
-  type MathFunctions,
-  NativeMath,
-  parse as parseBase,
-  type Quantity,
-  type Unit,
-} from "./unit.ts";
+import { makeUnitFactory, type MathFunctions, NativeMath, parse as parseBase, type Quantity, type Unit } from "./unit.ts";
 
 // ============================================================================
 // Quantity Type Aliases
@@ -65,10 +49,7 @@ export type Acceleration<T = number> = Quantity<T, dim.Acceleration>;
 /** A quantity of angular speed. */
 export type AngularSpeed<T = number> = Quantity<T, dim.AngularSpeed>;
 /** A quantity of angular acceleration. */
-export type AngularAcceleration<T = number> = Quantity<
-  T,
-  dim.AngularAcceleration
->;
+export type AngularAcceleration<T = number> = Quantity<T, dim.AngularAcceleration>;
 /** A quantity of frequency. */
 export type Frequency<T = number> = Quantity<T, dim.Frequency>;
 /** A quantity of force. */
@@ -111,7 +92,7 @@ export type EquivalentDose<T = number> = Quantity<T, dim.EquivalentDose>;
 // ============================================================================
 
 /** All units returned by withValueType. */
-export interface AllUnits<T> {
+export type AllUnits<T> = {
   [key: string]: Unit<T, dim.Dimensions>;
   // Length
   meters: Unit<T, dim.Length>;
@@ -277,13 +258,13 @@ export interface AllUnits<T> {
 
   // Equivalent Dose
   sieverts: Unit<T, dim.EquivalentDose>;
-}
+};
 
 /** Any unit with number type. */
 export type AnyUnit = Unit<number, dim.Dimensions>;
 
 /** Trigonometric functions for angles. */
-export interface AngleFunctions<T> {
+export type AngleFunctions<T> = {
   sin: (angle: Quantity<T, dim.Angle>) => T;
   cos: (angle: Quantity<T, dim.Angle>) => T;
   tan: (angle: Quantity<T, dim.Angle>) => T;
@@ -291,7 +272,7 @@ export interface AngleFunctions<T> {
   acos: (value: T) => Quantity<T, dim.Angle>;
   atan: (value: T) => Quantity<T, dim.Angle>;
   atan2: (x: T, y: T) => Quantity<T, dim.Angle>;
-}
+};
 
 // ============================================================================
 // Factory Function
@@ -304,9 +285,10 @@ export interface AngleFunctions<T> {
  * @param geometric The geometric implementation to use (optional, defaults to native).
  * @returns An object with all unit definitions and trigonometric functions.
  */
-export function withValueType<T>(
-  math: MathFunctions<T>,
-): { units: AllUnits<T>; trig: AngleFunctions<T> } {
+export function withValueType<T>(math: MathFunctions<T>): {
+  units: AllUnits<T>;
+  trig: AngleFunctions<T>;
+} {
   const { makeUnit } = makeUnitFactory<T>(math);
 
   // ==========================================================================
@@ -358,9 +340,10 @@ export function withValueType<T>(
   // Temperature
   const kelvin = makeUnit("K", dim.Temperature);
   const celsius = kelvin.withOffset(-273.15).withSymbol("°C");
-  const fahrenheit = kelvin.times(5 / 9).withOffset(-459.67).withSymbol(
-    "°F",
-  );
+  const fahrenheit = kelvin
+    .times(5 / 9)
+    .withOffset(-459.67)
+    .withSymbol("°F");
   const rankine = kelvin.times(5 / 9).withSymbol("°R");
 
   // Amount of Substance
@@ -387,9 +370,7 @@ export function withValueType<T>(
 
   // Solid Angle
   const steradians = makeUnit("sr", dim.SolidAngle);
-  const squareDegrees = steradians.times((Math.PI / 180) ** 2).withSymbol(
-    "deg²",
-  );
+  const squareDegrees = steradians.times((Math.PI / 180) ** 2).withSymbol("deg²");
 
   // ==========================================================================
   // Derived Units
@@ -414,38 +395,24 @@ export function withValueType<T>(
   const feetPerSecond = feet.per(seconds).brand(dim.Speed).withSymbol("fps");
 
   // Acceleration
-  const metersPerSecondSquared = meters.per(seconds.squared()).brand(
-    dim.Acceleration,
-  );
+  const metersPerSecondSquared = meters.per(seconds.squared()).brand(dim.Acceleration);
 
   // Angular Speed
   const radiansPerSecond = radians.per(seconds).brand(dim.AngularSpeed);
   const degreesPerSecond = degrees.per(seconds).brand(dim.AngularSpeed);
 
   // Angular Acceleration
-  const radiansPerSecondSquared = radiansPerSecond.squared().brand(
-    dim.AngularAcceleration,
-  );
-  const degreesPerSecondSquared = degreesPerSecond.squared().brand(
-    dim.AngularAcceleration,
-  );
+  const radiansPerSecondSquared = radiansPerSecond.squared().brand(dim.AngularAcceleration);
+  const degreesPerSecondSquared = degreesPerSecond.squared().brand(dim.AngularAcceleration);
 
   // Frequency
   const hertz = seconds.reciprocal().brand(dim.Frequency).withSymbol("Hz");
 
   // Force
-  const newtons = kilograms
-    .times(meters)
-    .per(seconds.squared())
-    .brand(dim.Force)
-    .withSymbol("N");
+  const newtons = kilograms.times(meters).per(seconds.squared()).brand(dim.Force).withSymbol("N");
 
   // Energy
-  const joules = kilograms
-    .times(meters.squared())
-    .per(seconds.squared())
-    .brand(dim.Energy)
-    .withSymbol("J");
+  const joules = kilograms.times(meters.squared()).per(seconds.squared()).brand(dim.Energy).withSymbol("J");
   const kilojoules = joules.withSiPrefix("k");
   const calories = joules.times(4.184).withSymbol("cal");
   const kilocalories = calories.withSiPrefix("k");
@@ -456,11 +423,7 @@ export function withValueType<T>(
   const watts = joules.per(seconds).brand(dim.Power).withSymbol("W");
 
   // Pressure
-  const pascals = kilograms
-    .per(meters)
-    .per(seconds.squared())
-    .brand(dim.Pressure)
-    .withSymbol("Pa");
+  const pascals = kilograms.per(meters).per(seconds.squared()).brand(dim.Pressure).withSymbol("Pa");
   const bar = pascals.times(100000).withSymbol("bar");
   const millibar = bar.withSiPrefix("m");
   const psi = pascals.times(6894.757293168).withSymbol("psi");
@@ -485,60 +448,43 @@ export function withValueType<T>(
   const picofarads = farads.withSiPrefix("p");
 
   // Inductance
-  const henries = volts
-    .times(seconds)
-    .per(amperes)
-    .brand(dim.Inductance)
-    .withSymbol("H");
+  const henries = volts.times(seconds).per(amperes).brand(dim.Inductance).withSymbol("H");
 
   // Magnetic Flux
   const webers = volts.times(seconds).brand(dim.MagneticFlux).withSymbol("Wb");
 
   // Magnetic Induction
-  const teslas = webers.per(squareMeters).brand(dim.MagneticInduction)
-    .withSymbol("T");
+  const teslas = webers.per(squareMeters).brand(dim.MagneticInduction).withSymbol("T");
 
   // Luminous Flux
-  const lumens = candelas.times(steradians).brand(dim.LuminousFlux).withSymbol(
-    "lm",
-  );
+  const lumens = candelas.times(steradians).brand(dim.LuminousFlux).withSymbol("lm");
 
   // Illuminance
   const lux = lumens.per(squareMeters).brand(dim.Illuminance);
 
   // Radioactivity
-  const becquerels = seconds.reciprocal().brand(dim.Radioactivity).withSymbol(
-    "Bq",
-  );
+  const becquerels = seconds.reciprocal().brand(dim.Radioactivity).withSymbol("Bq");
 
   // Absorbed Dose
   const grays = joules.per(kilograms).brand(dim.AbsorbedDose).withSymbol("Gy");
 
   // Equivalent Dose
-  const sieverts = joules.per(kilograms).brand(dim.EquivalentDose).withSymbol(
-    "Sv",
-  );
+  const sieverts = joules.per(kilograms).brand(dim.EquivalentDose).withSymbol("Sv");
 
   // ==========================================================================
   // Trigonometric Functions
   // ==========================================================================
 
-  const sin = (angle: Quantity<T, dim.Angle>): T =>
-    math.sin(angle.in(radians).amount);
+  const sin = (angle: Quantity<T, dim.Angle>): T => math.sin(angle.in(radians).amount);
 
-  const cos = (angle: Quantity<T, dim.Angle>): T =>
-    math.cos(angle.in(radians).amount);
+  const cos = (angle: Quantity<T, dim.Angle>): T => math.cos(angle.in(radians).amount);
 
-  const tan = (angle: Quantity<T, dim.Angle>): T =>
-    math.tan(angle.in(radians).amount);
+  const tan = (angle: Quantity<T, dim.Angle>): T => math.tan(angle.in(radians).amount);
 
   const asin = (value: T): Quantity<T, dim.Angle> => radians(math.asin(value));
   const acos = (value: T): Quantity<T, dim.Angle> => radians(math.acos(value));
   const atan = (value: T): Quantity<T, dim.Angle> => radians(math.atan(value));
-  const atan2 = (
-    x: T,
-    y: T,
-  ): Quantity<T, dim.Angle> => radians(math.atan2(x, y));
+  const atan2 = (x: T, y: T): Quantity<T, dim.Angle> => radians(math.atan2(x, y));
 
   const units: AllUnits<T> = {
     // Length
@@ -724,8 +670,7 @@ export function withValueType<T>(
 // Default Units (using native number type)
 // ============================================================================
 
-const _result: { units: AllUnits<number>; trig: AngleFunctions<number> } =
-  withValueType(NativeMath);
+const _result: { units: AllUnits<number>; trig: AngleFunctions<number> } = withValueType(NativeMath);
 export const allUnits: AllUnits<number> = _result.units;
 const _trig: AngleFunctions<number> = _result.trig;
 
@@ -919,12 +864,9 @@ export const atan2: (x: number, y: number) => Angle = _trig.atan2;
  */
 export function parse(
   input: string,
-  units?:
-    | Unit<number, dim.Dimensions>[]
-    | Record<string, Unit<number, dim.Dimensions>>
-    | AllUnits<number>,
+  units?: Unit<number, dim.Dimensions>[] | Record<string, Unit<number, dim.Dimensions>> | AllUnits<number>,
 ): Quantity<number, dim.Dimensions> {
-  const unitsArg = units || allUnits;
+  const unitsArg = units ?? allUnits;
   return parseBase(input, unitsArg);
 }
 

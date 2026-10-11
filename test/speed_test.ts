@@ -1,12 +1,5 @@
-import {
-  feetPerSecond,
-  kilometersPerHour,
-  knots,
-  metersPerSecond,
-  milesPerHour,
-} from "ts-units";
-import { describe, it } from "@std/testing/bdd";
-import { expect } from "@std/expect";
+import { feetPerSecond, kilometersPerHour, knots, metersPerSecond, milesPerHour } from "#mod";
+import { describe, expect, it } from "vitest";
 
 describe("speed smoke tests", () => {
   const equalUnits = [

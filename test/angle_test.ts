@@ -1,20 +1,5 @@
-import {
-  acos,
-  asin,
-  atan,
-  atan2,
-  cos,
-  degrees,
-  type Dimensions,
-  gradians,
-  type Quantity,
-  radians,
-  sin,
-  tan,
-  turns,
-} from "ts-units";
-import { describe, it } from "@std/testing/bdd";
-import { expect } from "@std/expect";
+import { acos, asin, atan, atan2, cos, degrees, type Dimensions, gradians, type Quantity, radians, sin, tan, turns } from "#mod";
+import { describe, expect, it } from "vitest";
 
 describe("angle", () => {
   describe("smoke tests", () => {
@@ -106,12 +91,6 @@ describe("angle", () => {
 });
 
 // TODO(bunge): Move this to a Chai method instead.
-function expectCloseTo<D extends Dimensions>(
-  actual: Quantity<number, D>,
-  expected: Quantity<number, D>,
-) {
-  return expect(
-    actual.isCloseTo(expected, 0.0001),
-    `Expected ${actual.in(expected.unit).toString()} to equal ${expected}`,
-  ).toBeTruthy();
+function expectCloseTo<D extends Dimensions>(actual: Quantity<number, D>, expected: Quantity<number, D>) {
+  expect(actual.isCloseTo(expected, 0.0001), `Expected ${actual.in(expected.unit).toString()} to equal ${String(expected)}`).toBeTruthy();
 }

@@ -1,6 +1,5 @@
-import { centimeters, percent, permille, permyriad, scalar } from "ts-units";
-import { describe, it } from "@std/testing/bdd";
-import { expect } from "@std/expect";
+import { centimeters, percent, permille, permyriad, scalar } from "#mod";
+import { describe, expect, it } from "vitest";
 
 describe("scalar", () => {
   describe("smoke tests", () => {

@@ -60,7 +60,7 @@ export function isExponent(x: unknown): x is Exponent {
     return false;
   }
 
-  return [-6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6].indexOf(x) >= 0;
+  return [-6, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6].includes(x);
 }
 
 /**
@@ -87,7 +87,7 @@ export function isExponent(x: unknown): x is Exponent {
 export type Add<A extends Exponent, B extends Exponent> =
   _Add[UndefinedToZero<A>][UndefinedToZero<B>];
 
-interface _Add extends BinaryTable {
+type _Add = BinaryTable & {
   [-6]: {
     [-6]: never;
     [-5]: never;
@@ -283,7 +283,7 @@ interface _Add extends BinaryTable {
     [5]: never;
     [6]: never;
   };
-}
+};
 
 /**
  * Returns the exponents that can be added to the given one without
@@ -303,7 +303,7 @@ export type Addable<A extends Exponent> =
   // that our “type instantiation is excessively deep and possibly infinite”.
   _Addable[UndefinedToZero<A>];
 
-interface _Addable extends UnaryTable {
+type _Addable = UnaryTable & {
   [-6]: undefined | 1 | 2 | 3 | 4 | 5 | 6;
   [-5]: -1 | undefined | 1 | 2 | 3 | 4 | 5 | 6;
   [-4]: -2 | -1 | undefined | 1 | 2 | 3 | 4 | 5 | 6;
@@ -317,7 +317,7 @@ interface _Addable extends UnaryTable {
   [4]: -6 | -5 | -4 | -3 | -2 | -1 | undefined | 1 | 2;
   [5]: -6 | -5 | -4 | -3 | -2 | -1 | undefined | 1;
   [6]: -6 | -5 | -4 | -3 | -2 | -1 | undefined;
-}
+};
 
 /**
  * Subtracts two exponents.
@@ -344,7 +344,7 @@ export type Subtract<
   B extends Exponent,
 > = _Subtract[UndefinedToZero<A>][UndefinedToZero<B>];
 
-interface _Subtract extends BinaryTable {
+type _Subtract = BinaryTable & {
   [-6]: {
     [-6]: undefined;
     [-5]: -1;
@@ -540,7 +540,7 @@ interface _Subtract extends BinaryTable {
     [5]: 1;
     [6]: undefined;
   };
-}
+};
 
 /**
  * Returns the exponents that can be subtracted from the given one without
@@ -560,7 +560,7 @@ export type Subtractable<A extends Exponent> =
   // that our “type instantiation is excessively deep and possibly infinite”.
   _Subtractable[UndefinedToZero<A>];
 
-interface _Subtractable extends UnaryTable {
+type _Subtractable = UnaryTable & {
   [-6]: -6 | -5 | -4 | -3 | -2 | -1 | undefined;
   [-5]: -6 | -5 | -4 | -3 | -2 | -1 | undefined | 1;
   [-4]: -6 | -5 | -4 | -3 | -2 | -1 | undefined | 1 | 2;
@@ -574,7 +574,7 @@ interface _Subtractable extends UnaryTable {
   [4]: -2 | -1 | undefined | 1 | 2 | 3 | 4 | 5 | 6;
   [5]: -1 | undefined | 1 | 2 | 3 | 4 | 5 | 6;
   [6]: undefined | 1 | 2 | 3 | 4 | 5 | 6;
-}
+};
 
 /**
  * Returns the negative value of an exponent.
@@ -590,7 +590,7 @@ interface _Subtractable extends UnaryTable {
  */
 export type Negate<X extends Exponent> = _Negate[UndefinedToZero<X>];
 
-interface _Negate extends UnaryTable {
+type _Negate = UnaryTable & {
   [-6]: 6;
   [-5]: 5;
   [-4]: 4;
@@ -604,7 +604,7 @@ interface _Negate extends UnaryTable {
   [4]: -4;
   [5]: -5;
   [6]: -6;
-}
+};
 
 /**
  * Returns the double value of an exponent.
@@ -620,7 +620,7 @@ interface _Negate extends UnaryTable {
  */
 export type Double<X extends Exponent> = _Double[UndefinedToZero<X>];
 
-interface _Double extends UnaryTable {
+type _Double = UnaryTable & {
   [-6]: never;
   [-5]: never;
   [-4]: never;
@@ -634,7 +634,7 @@ interface _Double extends UnaryTable {
   [4]: never;
   [5]: never;
   [6]: never;
-}
+};
 
 /**
  * Returns the triple value of an exponent.
@@ -650,7 +650,7 @@ interface _Double extends UnaryTable {
  */
 export type Triple<X extends Exponent> = _Triple[UndefinedToZero<X>];
 
-interface _Triple extends UnaryTable {
+type _Triple = UnaryTable & {
   [-6]: never;
   [-5]: never;
   [-4]: never;
@@ -664,7 +664,7 @@ interface _Triple extends UnaryTable {
   [4]: never;
   [5]: never;
   [6]: never;
-}
+};
 
 /**
  * Exponents as used in the arithmetic lookup tables in this file. This is the
@@ -677,17 +677,13 @@ type LookupExponent = Exclude<Exponent, undefined> | 0;
  * A unary arithmetic lookup tables maps a single (arithmetic) exponents to a
  * new exponent.
  */
-type UnaryTable = {
-  [A in LookupExponent]: Exponent;
-};
+type UnaryTable = Record<LookupExponent, Exponent>;
 
 /**
  * A binary arithmetic lookup tables map two (arithmetic) exponents to a new
  * exponent.
  */
-type BinaryTable = {
-  [A in LookupExponent]: UnaryTable;
-};
+type BinaryTable = Record<LookupExponent, UnaryTable>;
 
 /** Convert an Exponent into a `LookupExponent`. */
 type UndefinedToZero<X extends Exponent> = X extends undefined ? 0 : X;

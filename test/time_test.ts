@@ -1,13 +1,5 @@
-import {
-  hours,
-  microseconds,
-  milliseconds,
-  minutes,
-  nanoseconds,
-  seconds,
-} from "ts-units";
-import { describe, it } from "@std/testing/bdd";
-import { expect } from "@std/expect";
+import { hours, microseconds, milliseconds, minutes, nanoseconds, seconds } from "#mod";
+import { describe, expect, it } from "vitest";
 
 describe("time smoke tests", () => {
   const equalUnits = [

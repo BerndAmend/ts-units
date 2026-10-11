@@ -1,13 +1,5 @@
-import {
-  type Add,
-  type Double,
-  isExponent,
-  type Negate,
-  type Subtract,
-  type Triple,
-} from "ts-units";
-import { describe, it } from "@std/testing/bdd";
-import { expect } from "@std/expect";
+import { type Add, type Double, isExponent, type Negate, type Subtract, type Triple } from "#mod";
+import { describe, expect, it } from "vitest";
 
 const _a1: Add<2, 1> = 3;
 const _a2: Add<2, -3> = -1;

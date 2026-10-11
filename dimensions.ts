@@ -34,17 +34,11 @@ import type { Exponent } from "./exponent.ts";
  */
 export const Brand: unique symbol = Symbol("Brand");
 
-export interface Branding {
+export type Branding = {
   readonly [Brand]?: symbol;
-}
+};
 
-export type Dimensions =
-  & Readonly<
-    {
-      [key: string]: Exponent;
-    }
-  >
-  & Branding;
+export type Dimensions = Readonly<Record<string, Exponent>> & Branding;
 
 /**
  * Extracts dimension keys, excluding the Brand symbol.
@@ -60,14 +54,14 @@ type DimensionKeys<D extends Dimensions> = Exclude<keyof D, typeof Brand>;
 export type StructurallyEqual<A extends Dimensions, B extends Dimensions> =
   DimensionKeys<A> extends DimensionKeys<B>
     ? DimensionKeys<B> extends DimensionKeys<A>
-      ? [DimensionKeys<A>] extends [never] ? true // Both are dimensionless
-      : {
-        [K in DimensionKeys<A>]: A[K] extends B[K]
-          ? B[K] extends A[K] ? true : false
-          : false;
-      }[DimensionKeys<A>] extends true ? true
+      ? [DimensionKeys<A>] extends [never]
+        ? true // Both are dimensionless
+        : {
+              [K in DimensionKeys<A>]: A[K] extends B[K] ? (B[K] extends A[K] ? true : false) : false;
+            }[DimensionKeys<A>] extends true
+          ? true
+          : false
       : false
-    : false
     : false;
 
 /**
@@ -116,17 +110,13 @@ export const One: One = {};
  * Multiplies two dimensions, adding their exponents.
  */
 export type Times<A extends Dimensions, B extends Multiplicand<A>> = {
-  [
-    K in keyof A | keyof B as K extends typeof Brand ? never
-      : exp.Add<Get<A, K>, Get<B, K>> extends undefined ? never
-      : K
-  ]: exp.Add<Get<A, K>, Get<B, K>>;
+  [K in keyof A | keyof B as K extends typeof Brand ? never : exp.Add<Get<A, K>, Get<B, K>> extends undefined ? never : K]: exp.Add<
+    Get<A, K>,
+    Get<B, K>
+  >;
 };
 
-export function Times<A extends Dimensions, B extends Multiplicand<A>>(
-  a: A,
-  b: B,
-): Times<A, B> {
+export function Times<A extends Dimensions, B extends Multiplicand<A>>(a: A, b: B): Times<A, B> {
   return combineExponents(a, b, (a, b) => a + b) as Times<A, B>;
 }
 
@@ -150,16 +140,11 @@ export type Multiplicand<A extends Dimensions> =
  */
 export type Over<A extends Dimensions, B extends Divisor<A>> = {
   [
-    K in keyof A | keyof B as K extends typeof Brand ? never
-      : exp.Subtract<Get<A, K>, Get<B, K>> extends undefined ? never
-      : K
+    K in keyof A | keyof B as K extends typeof Brand ? never : exp.Subtract<Get<A, K>, Get<B, K>> extends undefined ? never : K
   ]: exp.Subtract<Get<A, K>, Get<B, K>>;
 };
 
-export function Over<A extends Dimensions, B extends Divisor<A>>(
-  a: A,
-  b: B,
-): Over<A, B> {
+export function Over<A extends Dimensions, B extends Divisor<A>>(a: A, b: B): Over<A, B> {
   return combineExponents(a, b, (a, b) => a - b) as Over<A, B>;
 }
 
@@ -214,14 +199,9 @@ export function Cubed<X extends Dimensions>(x: X): Cubed<X> {
 /**
  * Retrieves the exponent of a given dimension in set of dimensions.
  */
-type Get<D extends Dimensions, K> = K extends keyof D ? D[K]
-  : undefined;
+type Get<D extends Dimensions, K> = K extends keyof D ? D[K] : undefined;
 
-function combineExponents(
-  d1: Dimensions,
-  d2: Dimensions,
-  f: (e1: number, e2: number) => number,
-): Dimensions {
+function combineExponents(d1: Dimensions, d2: Dimensions, f: (e1: number, e2: number) => number): Dimensions {
   const keys = new Set<string>();
   Object.keys(d1).forEach((x) => {
     if (x !== "_brand") keys.add(x);
@@ -232,17 +212,15 @@ function combineExponents(
 
   const ret: Record<string, Exponent> = {};
   for (const key of keys) {
-    const v1 = d1[key] as Exponent;
-    const v2 = d2[key] as Exponent;
-    const val = f(v1 || 0, v2 || 0);
+    const v1 = d1[key];
+    const v2 = d2[key];
+    const val = f(v1 ?? 0, v2 ?? 0);
     if (!val) {
       continue;
     }
 
     if (!exp.isExponent(val)) {
-      throw new Error(
-        `Overflow in ${key} when combining ${v1} and ${v2}`,
-      );
+      throw new Error(`Overflow in ${key} when combining ${v1} and ${v2}`);
     }
 
     ret[key] = val;

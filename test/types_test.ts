@@ -21,9 +21,8 @@ import {
   type Speed,
   type Time,
   watts,
-} from "ts-units";
-import { describe, it } from "@std/testing/bdd";
-import { expect } from "@std/expect";
+} from "#mod";
+import { describe, expect, it } from "vitest";
 
 describe("Type Safety", () => {
   it("should not allow assigning Speed to Length", () => {
@@ -80,8 +79,8 @@ describe("Type Safety", () => {
       const f: Frequency = hertz(100);
       const d: Radioactivity = becquerels(100);
 
-      const setFrequency = (_: Frequency) => {};
-      const setDecay = (_: Radioactivity) => {};
+      const setFrequency = (_: Frequency) => undefined;
+      const setDecay = (_: Radioactivity) => undefined;
 
       // @ts-expect-error Frequency should not be assignable to Radioactivity
       setDecay(f);
@@ -93,8 +92,8 @@ describe("Type Safety", () => {
       const g: AbsorbedDose = grays(2);
       const s: EquivalentDose = sieverts(2);
 
-      const useAbsorbed = (_: AbsorbedDose) => {};
-      const useEquivalent = (_: EquivalentDose) => {};
+      const useAbsorbed = (_: AbsorbedDose) => undefined;
+      const useEquivalent = (_: EquivalentDose) => undefined;
 
       // @ts-expect-error EquivalentDose should not be assignable to AbsorbedDose
       useAbsorbed(s);

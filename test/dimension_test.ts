@@ -1,18 +1,12 @@
-import {
-  Cubed,
-  type Dimensions,
-  type Over,
-  Reciprocal,
-  Squared,
-  Times,
-} from "ts-units";
-import { describe, it } from "@std/testing/bdd";
-import { expect } from "@std/expect";
+import { Cubed, type Dimensions, type Over, Reciprocal, Squared, Times } from "#mod";
+import { describe, expect, it } from "vitest";
 
 const _t1: Times<{ length: 1 }, { length: 1 }> = { length: 2 };
 const _t2: Times<{ length: 1 }, { time: -1 }> = { length: 1, time: -1 };
+// eslint-disable-next-line @typescript-eslint/no-generated-empty-object-type -- dimensionless result is intentional
 const _t3: Times<{ length: 1 }, { length: -1 }> = {};
 const _o1: Over<{ length: 1 }, { time: 1 }> = { length: 1, time: -1 };
+// eslint-disable-next-line @typescript-eslint/no-generated-empty-object-type -- dimensionless result is intentional
 const _o2: Over<{ length: 1 }, { length: 1 }> = {};
 const _r1: Reciprocal<{ time: 1 }> = { time: -1 };
 const _r2: Reciprocal<{ length: 1; time: -2 }> = { length: -1, time: 2 };

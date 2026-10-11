@@ -1,4 +1,4 @@
-#!/usr/bin/env deno
+#!/usr/bin/env node
 /** Generates the exponent.ts file. */
 import * as process from "node:process";
 
@@ -55,10 +55,7 @@ function unaryTable(f: (i: number) => number) {
 }
 
 /** An array of all exponents. */
-const EXPONENTS = Array.from(
-  { length: MAX_EXPONENT * 2 + 1 },
-  (_, i) => i - MAX_EXPONENT,
-);
+const EXPONENTS = Array.from({ length: MAX_EXPONENT * 2 + 1 }, (_, i) => i - MAX_EXPONENT);
 
 const TEMPLATE = `// GENERATED FILE | DO NOT MODIFY
 //
@@ -102,19 +99,17 @@ ${EXPONENTS.map((x) => "  | " + formatExp(x)).join("\n")};
  * @param x Any value.
  */
 export function isExponent(x: unknown): x is Exponent {
-  if (typeof x === 'undefined') {
+  if (typeof x === "undefined") {
     return true;
   }
 
-  if (typeof x !== 'number') {
+  if (typeof x !== "number") {
     return false;
   }
 
-  return [${
-  EXPONENTS.filter((x) => x !== 0)
+  return [${EXPONENTS.filter((x) => x !== 0)
     .map((x) => formatExp(x))
-    .join(", ")
-}].indexOf(x) >= 0;
+    .join(", ")}].includes(x);
 }
 
 /**
@@ -141,9 +136,9 @@ export function isExponent(x: unknown): x is Exponent {
 export type Add<A extends Exponent, B extends Exponent> =
   _Add[UndefinedToZero<A>][UndefinedToZero<B>];
 
-interface _Add extends BinaryTable {
+type _Add = BinaryTable & {
 ${binaryTable((a, b) => a + b)}
-}
+};
 
 /**
  * Returns the exponents that can be added to the given one without
@@ -163,9 +158,9 @@ export type Addable<A extends Exponent> =
   // that our “type instantiation is excessively deep and possibly infinite”.
   _Addable[UndefinedToZero<A>];
 
-interface _Addable extends UnaryTable {
+type _Addable = UnaryTable & {
 ${ableTable((a, b) => a + b)}
-}
+};
 
 /**
  * Subtracts two exponents.
@@ -189,12 +184,12 @@ ${ableTable((a, b) => a + b)}
  */
 export type Subtract<
   A extends Exponent,
-  B extends Exponent
+  B extends Exponent,
 > = _Subtract[UndefinedToZero<A>][UndefinedToZero<B>];
 
-interface _Subtract extends BinaryTable {
+type _Subtract = BinaryTable & {
 ${binaryTable((a, b) => a - b)}
-}
+};
 
 /**
  * Returns the exponents that can be subtracted from the given one without
@@ -214,9 +209,9 @@ export type Subtractable<A extends Exponent> =
   // that our “type instantiation is excessively deep and possibly infinite”.
   _Subtractable[UndefinedToZero<A>];
 
-interface _Subtractable extends UnaryTable {
+type _Subtractable = UnaryTable & {
 ${ableTable((a, b) => a - b)}
-}
+};
 
 /**
  * Returns the negative value of an exponent.
@@ -232,9 +227,9 @@ ${ableTable((a, b) => a - b)}
  */
 export type Negate<X extends Exponent> = _Negate[UndefinedToZero<X>];
 
-interface _Negate extends UnaryTable {
+type _Negate = UnaryTable & {
 ${unaryTable((x) => -x)}
-}
+};
 
 /**
  * Returns the double value of an exponent.
@@ -250,9 +245,9 @@ ${unaryTable((x) => -x)}
  */
 export type Double<X extends Exponent> = _Double[UndefinedToZero<X>];
 
-interface _Double extends UnaryTable {
+type _Double = UnaryTable & {
 ${unaryTable((x) => x * 2)}
-}
+};
 
 /**
  * Returns the triple value of an exponent.
@@ -268,9 +263,9 @@ ${unaryTable((x) => x * 2)}
  */
 export type Triple<X extends Exponent> = _Triple[UndefinedToZero<X>];
 
-interface _Triple extends UnaryTable {
+type _Triple = UnaryTable & {
 ${unaryTable((x) => x * 3)}
-}
+};
 
 /**
  * Exponents as used in the arithmetic lookup tables in this file. This is the
@@ -283,17 +278,13 @@ type LookupExponent = Exclude<Exponent, undefined> | 0;
  * A unary arithmetic lookup tables maps a single (arithmetic) exponents to a
  * new exponent.
  */
-type UnaryTable = {
-  [A in LookupExponent]: Exponent;
-};
+type UnaryTable = Record<LookupExponent, Exponent>;
 
 /**
  * A binary arithmetic lookup tables map two (arithmetic) exponents to a new
  * exponent.
  */
-type BinaryTable = {
-  [A in LookupExponent]: UnaryTable;
-};
+type BinaryTable = Record<LookupExponent, UnaryTable>;
 
 /** Convert an Exponent into a \`LookupExponent\`. */
 type UndefinedToZero<X extends Exponent> = X extends undefined ? 0 : X;

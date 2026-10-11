@@ -1,12 +1,5 @@
-import {
-  makeUnit,
-  makeUnitFactory,
-  type MathFunctions,
-  type Quantity,
-  type Unit,
-} from "ts-units";
-import { describe, it } from "@std/testing/bdd";
-import { expect } from "@std/expect";
+import { makeUnit, makeUnitFactory, type MathFunctions, type Quantity, type Unit } from "#mod";
+import { describe, expect, it } from "vitest";
 
 type Temperature = { temperature: 1 };
 const Temperature: Temperature = { temperature: 1 };
@@ -32,24 +25,17 @@ const _Speed: Speed = { length: 1, time: -1 };
 const StringArithmetic: MathFunctions<string> = {
   fromNative: (value: number): string => value.toString(),
   toNative: (value: string): number => Number(value),
-  add: (left: string, right: string): string =>
-    (Number(left) + Number(right)).toString(),
-  sub: (left: string, right: string): string =>
-    (Number(left) - Number(right)).toString(),
-  mul: (left: string, right: string): string =>
-    (Number(left) * Number(right)).toString(),
-  div: (left: string, right: string): string =>
-    (Number(left) / Number(right)).toString(),
-  pow: (base: string, exponent: string): string =>
-    (Number(base) ** Number(exponent)).toString(),
+  add: (left: string, right: string): string => (Number(left) + Number(right)).toString(),
+  sub: (left: string, right: string): string => (Number(left) - Number(right)).toString(),
+  mul: (left: string, right: string): string => (Number(left) * Number(right)).toString(),
+  div: (left: string, right: string): string => (Number(left) / Number(right)).toString(),
+  pow: (base: string, exponent: string): string => (Number(base) ** Number(exponent)).toString(),
   abs: (value: string): string => Math.abs(Number(value)).toString(),
-  compare: (left: string, right: string): number =>
-    Number(left) - Number(right),
+  compare: (left: string, right: string): number => Number(left) - Number(right),
   acos: (value: string): string => Math.acos(Number(value)).toString(),
   asin: (value: string): string => Math.asin(Number(value)).toString(),
   atan: (value: string): string => Math.atan(Number(value)).toString(),
-  atan2: (left: string, right: string): string =>
-    Math.atan2(Number(left), Number(right)).toString(),
+  atan2: (left: string, right: string): string => Math.atan2(Number(left), Number(right)).toString(),
   cos: (value: string): string => Math.cos(Number(value)).toString(),
   sin: (value: string): string => Math.sin(Number(value)).toString(),
   tan: (value: string): string => Math.tan(Number(value)).toString(),

@@ -1,6 +1,5 @@
-import { describe, it } from "@std/testing/bdd";
-import { expect } from "@std/expect";
-import { parse } from "ts-units";
+import { describe, expect, it } from "vitest";
+import { parse } from "#mod";
 
 describe("parse", () => {
   describe("basics", () => {

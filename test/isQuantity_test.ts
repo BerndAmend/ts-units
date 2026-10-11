@@ -1,13 +1,5 @@
-import { describe, it } from "@std/testing/bdd";
-import { expect } from "@std/expect";
-import {
-  celsius,
-  isQuantity,
-  kilometersPerHour,
-  meters,
-  parse,
-  seconds,
-} from "ts-units";
+import { celsius, isQuantity, kilometersPerHour, meters, parse, seconds } from "#mod";
+import { describe, expect, it } from "vitest";
 
 describe("isQuantity", () => {
   describe("quantities", () => {
@@ -85,12 +77,8 @@ describe("isQuantity", () => {
     });
 
     it("returns false for objects missing a quantity member", () => {
-      expect(isQuantity({ amount: 1, value: () => 1, dimension: {} })).toBe(
-        false,
-      );
-      expect(
-        isQuantity({ amount: 1, in: () => 1, unit: () => 1, dimension: {} }),
-      ).toBe(false);
+      expect(isQuantity({ amount: 1, value: () => 1, dimension: {} })).toBe(false);
+      expect(isQuantity({ amount: 1, in: () => 1, unit: () => 1, dimension: {} })).toBe(false);
     });
   });
 });

@@ -1,6 +1,5 @@
-import { celsius, fahrenheit, kelvin } from "ts-units";
-import { describe, it } from "@std/testing/bdd";
-import { expect } from "@std/expect";
+import { celsius, fahrenheit, kelvin } from "#mod";
+import { describe, expect, it } from "vitest";
 
 describe("temperature smoke tests", () => {
   const equalUnits = [

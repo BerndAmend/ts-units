@@ -13,9 +13,8 @@ import {
   nanometers,
   nauticalMiles,
   yards,
-} from "ts-units";
-import { describe, it } from "@std/testing/bdd";
-import { expect } from "@std/expect";
+} from "#mod";
+import { describe, expect, it } from "vitest";
 
 describe("length smoke tests", () => {
   const equalUnits = [
